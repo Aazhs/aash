@@ -69,7 +69,7 @@ public enum SpriteArt {
    Copy them exactly. Each frame is a column in that block: read down a column to get its 11 rows.
 5. Write `color(of:x:y:)`: out of range → nil; the character at `rows(for: frame)[y]`, index `x`;
    `"."` → nil; otherwise `palette[character]`.
-6. Delete the two placeholder files. Write the tests below.
+6. Delete the two placeholder files with `git rm`. Write the tests below.
 7. Run `./scripts/check.sh --target AashSprites` while working (this card runs in parallel with
    T03). Finish with it passing; the orchestrator runs the full check.
 

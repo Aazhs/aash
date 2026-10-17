@@ -185,8 +185,10 @@ public struct BehaviourEngine: Sendable {
   - `wakesUpInTheMorning`: continuing, tick at 07:00 on the 19th → activity `idle`, schedule
     `.once(at: 07:00:04 on the 19th)`
   - `fallsAsleepAt23`: `quiet`, init 22:59 → schedule `.once(at: 23:00)`; tick at 23:00 → `night`
-  - `chatWakesItAtNight`: init 23:30, `chatOpened` → activity `idle`; `chatClosed`, then a tick →
-    activity `night`
+  - `chatWakesItAtNight`: init 23:30, `chatOpened` → activity `idle`; a tick 5 s later (chat still
+    open) → still `idle`; `chatClosed`, then a tick → activity `night`
+  - `staleWaveDroppedOnResume`: `quiet`, init 10:00, `reminderAt(10:05)`, `paused(true)` at 10:01,
+    `paused(false)` at 10:30 → activity `idle`, and a tick at 10:30:01 doesn't start `waving`
   - `walkingOffSendsHome`: `quiet`, init 10:00, walking out from 10:10, `walkingEnabled(false)` →
     `walkingHome`; after arriving, the schedule holds no walk: it's `.once(at: 12:46:40)`, the
     next blink (10:00 + 10,000 s)

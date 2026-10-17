@@ -20,6 +20,7 @@ brief: it was written so that following it exactly produces the right result.
 ## While you write code
 
 - Change only the files the card lists. If another file has to change, stop and report why.
+  Delete files with `git rm <path>`.
 - Copy patterns from `docs/patterns.md`. Don't invent new ways to do timers, layers, observers,
   networking, tests or Keychain access.
 - Implement the card's "Interfaces" exactly: same names, same signatures, same access levels.

@@ -33,7 +33,8 @@ Run `git status --short`. If there are uncommitted changes that don't belong to 
 Start the `implementer` subagent. Pass the card's `Model` column as the model (`haiku`, `sonnet`
 or `opus`) and this task: "Implement `docs/tasks/<card file>`. Read the whole card first."
 
-Its report starts with `RESULT:`. If it says `blocked`, go to section 5.
+Its report starts with `RESULT:`. If it says `blocked`, go to section 5. If instead it stopped at
+its turn limit (the result is marked partial), send it "continue" with SendMessage, once.
 
 ## 3. Check
 

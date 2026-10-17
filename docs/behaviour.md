@@ -99,7 +99,7 @@ These are the defaults in `BehaviourConfig.standard`.
 | `reminderDue` | Unless `paused`: `waving` until `now + waveLength`, from wherever it is (it stops walking). |
 | `reminderAt(date)` | Remembers `date − waveLead` as the wave time (or forgets it for `nil`). A tick at or past that time acts like `reminderDue`, then forgets it. A wave time already in the past is ignored. |
 | `paused(true)` | `paused`: snap home, clock `stopped`. Remembers whether it was night. |
-| `paused(false)` | From `paused`: `night` if it's night now, else `idle`. Next blink and next walk are picked fresh from `now`. |
+| `paused(false)` | From `paused`: `night` if it's night now (and the chat is closed), else `idle`. Next blink and next walk are picked fresh from `now`. A reminder wave time that passed while paused is dropped: the Reminders alert already covered it. |
 | `walkingEnabled(false)` | No new walks. In `awaitingArea`: give up. In `walkingOut` or `resting`: start `walkingHome`. |
 | `walkingEnabled(true)` | Walks allowed again. Next walk is picked fresh from `now`. |
 
@@ -115,8 +115,9 @@ On `tick` at `now`:
 1. **Blinking** (in `idle`, `awaitingArea`, `resting`): if a blink is showing and `now` is at or
    past its end, show `idle`. Otherwise, if `now` is at or past the next blink, show `blink`, set
    the blink end to `now + blinkLength`, and pick the next blink as `now + random(blinkEvery)`.
-2. **Idle:** if it's night, enter `night`. Else if walking is enabled, the chat is closed and `now`
-   is at or past the next walk: enter `awaitingArea` with a deadline of `now + areaTimeout`.
+2. **Idle:** if it's night and the chat is closed, enter `night`. Else if walking is enabled, the
+   chat is closed and `now` is at or past the next walk: enter `awaitingArea` with a deadline of
+   `now + areaTimeout`.
 3. **Awaiting area:** if `now` is at or past the deadline, give up: `idle`, next walk is
    `now + random(walkEvery)`.
 4. **Moving** (`walkingOut`, `walkingHome`): step = `walkSpeed × min(now − lastMove, maxStep)`.

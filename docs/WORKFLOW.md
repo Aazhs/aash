@@ -123,7 +123,9 @@ Use this rule when writing or editing a card:
 - Start sessions with `--model sonnet`. Opus only runs where a skill or card asks for it.
 - `/clear` between cards. A long conversation is re-read on every request.
 - Prefer `/next` over chatting about code; the cards already hold the context.
-- Planning is the expensive part, and it happens once per phase.
+- Planning is the expensive part, and it happens once per phase. The advisor also runs during
+  `/plan-phase` (Opus consulting Opus). If you want a cheaper planning session, run `/advisor off`
+  before it and `/advisor opus` after.
 
 ## Skip these for now
 

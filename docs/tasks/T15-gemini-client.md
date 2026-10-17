@@ -20,7 +20,7 @@ replies, and errors mapped to `ChatError`. Tests replay T14's fixtures through a
 - create `Sources/AashAI/ServerSentEvents.swift` (bytes or lines → events)
 - create `Sources/AashAI/GeminiProvider.swift`
 - create `Tests/AashAITests/GeminiProviderTests.swift`, `ServerSentEventsTests.swift`, `StubURLProtocol.swift`
-- delete `Sources/AashAI/AashAI.swift` and its placeholder test
+- delete `Sources/AashAI/AashAI.swift` and its placeholder test (with `git rm`)
 
 ## Sketch
 
