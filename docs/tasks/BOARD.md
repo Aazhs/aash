@@ -11,7 +11,7 @@ with the same `Parallel` group run together. Phases 3–5 are outlines until `/p
 | T03 | [Behaviour engine](T03-behaviour-engine.md) | 1 | sonnet | sonnet | — | P1 | done |
 | T04 | [Status item](T04-status-item.md) | 1 | sonnet | opus | T02, T03 | — | done |
 | T05 | [Pause when nobody's looking](T05-pause.md) | 1 | sonnet | sonnet | T04 | — | done |
-| T06 | [Menu and open at login](T06-menu-and-login.md) | 1 | haiku | sonnet | T04 | — | todo |
+| T06 | [Menu and open at login](T06-menu-and-login.md) | 1 | haiku | sonnet | T04 | — | done |
 | T07 | [Check: idle budget](T07-idle-budget.md) | 1 | haiku | sonnet | T05, T06 | — | todo |
 | T08 | [Stretch walk](T08-stretch-walk.md) | 2 | sonnet | sonnet | T07 | — | todo |
 | T09 | [Walk safety](T09-walk-safety.md) | 2 | sonnet | sonnet | T08 | — | todo |

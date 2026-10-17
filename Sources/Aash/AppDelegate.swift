@@ -5,13 +5,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: StatusItemController?
     private var buddy: BuddyController?
     private var systemEvents: SystemEvents?
+    private var appMenu: AppMenu?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let item = StatusItemController()
-        // T06 replaces this menu.
-        let menu = NSMenu()
-        menu.addItem(withTitle: "Quit Aash", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
-        item.menu = menu
+        let menu = AppMenu()
+        item.menu = menu.menu
+        appMenu = menu
         statusItem = item
 
         let controller = BuddyController(statusItem: item)
