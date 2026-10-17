@@ -6,3 +6,4 @@ needed help, so card models can be tuned.
 | Date | Card | Implementer model | Fix rounds | Note |
 |---|---|---|---|---|
 | 2026-10-18 | Phase 0 (setup) | opus (main session) | — | Skeleton, scripts, agents, skills, docs and cards. Toolchain quirk found and fixed (decisions.md). |
+| 2026-10-18 | T01 Sprite art | haiku | 0 | Passed review first time; grids ported by script and checked against sprites.md. |

@@ -6,9 +6,9 @@ with the same `Parallel` group run together. Phases 3–5 are outlines until `/p
 
 | ID | Card | Phase | Model | Reviewer | Needs | Parallel | Status |
 |---|---|---|---|---|---|---|---|
-| T01 | [Sprite art](T01-sprite-art.md) | 1 | haiku | sonnet | — | P1 | todo |
+| T01 | [Sprite art](T01-sprite-art.md) | 1 | haiku | sonnet | — | P1 | done |
 | T02 | [Sprite sheet](T02-sprite-sheet.md) | 1 | sonnet | sonnet | T01 | — | todo |
-| T03 | [Behaviour engine](T03-behaviour-engine.md) | 1 | sonnet | sonnet | — | P1 | todo |
+| T03 | [Behaviour engine](T03-behaviour-engine.md) | 1 | sonnet | sonnet | — | P1 | doing |
 | T04 | [Status item](T04-status-item.md) | 1 | sonnet | opus | T02, T03 | — | todo |
 | T05 | [Pause when nobody's looking](T05-pause.md) | 1 | sonnet | sonnet | T04 | — | todo |
 | T06 | [Menu and open at login](T06-menu-and-login.md) | 1 | haiku | sonnet | T04 | — | todo |
