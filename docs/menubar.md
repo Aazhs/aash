@@ -56,6 +56,8 @@ When the status item can't be seen, the buddy shouldn't animate:
 - Screen asleep (`NSWorkspace.screensDidSleepNotification`), screen locked (distributed
   notifications `com.apple.screenIsLocked` / `com.apple.screenIsUnlocked`), and Low Power Mode
   also pause.
+- 2026-10-18: on macOS 27 the occlusion notification did not fire for the status item during
+  full screen (no `hidden` log line). Low Power and lock still pause; nothing else to do.
 
 ## Free walk
 

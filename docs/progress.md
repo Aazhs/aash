@@ -10,3 +10,4 @@ needed help, so card models can be tuned.
 | 2026-10-18 | T03 Behaviour engine | sonnet | 1 | Review fixed clock-step clamp and click-while-walking-out; 42 tests. |
 | 2026-10-18 | T02 Sprite sheet | sonnet | 0 | Passed review first time; 10 pixel-readback tests. SpriteSheet not Sendable yet (T04 may need it). |
 | 2026-10-18 | T04 Status item | sonnet | 0 | Resumed after interrupted run; Opus review passed; idle 0.10% CPU, 11.0 MB. |
+| 2026-10-18 | T05 Pause when nobody's looking | sonnet | 0 | Passed review first time; Low Power pause/resume confirmed in log; occlusion does not fire on macOS 27 (noted in menubar.md). |
