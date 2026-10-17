@@ -7,3 +7,4 @@ needed help, so card models can be tuned.
 |---|---|---|---|---|
 | 2026-10-18 | Phase 0 (setup) | opus (main session) | — | Skeleton, scripts, agents, skills, docs and cards. Toolchain quirk found and fixed (decisions.md). |
 | 2026-10-18 | T01 Sprite art | haiku | 0 | Passed review first time; grids ported by script and checked against sprites.md. |
+| 2026-10-18 | T03 Behaviour engine | sonnet | 1 | Review fixed clock-step clamp and click-while-walking-out; 42 tests. |
