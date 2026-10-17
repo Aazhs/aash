@@ -24,8 +24,9 @@ public enum BuddyEvent: Equatable, Sendable {
     case clicked                            // left click on the buddy
     case chatOpened, chatClosed
     case replyArrived                       // a chat reply finished
-    case reminderDue                        // a reminder is about to be due
-    case walkArea(ClosedRange<Double>?)     // room to walk, as offsets from home; nil = none
+    case reminderDue                        // wave now
+    case reminderAt(Date?)                  // the next reminder's due time; nil = none
+    case walkArea(ClosedRange<Double>?)     // where a walk may end, as offsets from home; nil = no room
     case paused(Bool)                       // screen asleep, locked, Low Power, or bar hidden
     case walkingEnabled(Bool)               // the user's setting
     case walkNow                            // "Walk now" in the menu
@@ -44,7 +45,9 @@ public enum Activity: Equatable, Sendable {
 }
 ```
 
-## Timings (`BehaviourConfig.standard`)
+## Timings
+
+These are the defaults in `BehaviourConfig.standard`.
 
 | Setting | Value | Meaning |
 |---|---|---|
@@ -56,6 +59,7 @@ public enum Activity: Equatable, Sendable {
 | `walkFPS` | 8 | Ticks a second while walking; the frame alternates `walk`/`idle` each tick |
 | `restLength` | 2…6 s | Pause at the far end before walking home |
 | `waveLength` | 6 s | How long it waves for a reminder |
+| `waveLead` | 5 s | Start waving this long before a reminder is due |
 | `waveFPS` | 4 | Ticks a second while waving; alternates `wave`/`waveHigh` |
 | `cheerLength` | 0.6 s | `armsUp` after a chat reply |
 | `areaTimeout` | 2 s | How long to wait for a walk area before giving up |
@@ -68,14 +72,14 @@ public enum Activity: Equatable, Sendable {
 
 | Activity | Pose | Schedule | Leaves when |
 |---|---|---|---|
-| `idle` | `idle`, or `blink` while blinking | `once(at:)` the earliest of: blink start or end, next walk (if walking is enabled and the chat is closed), night start | Walk time → `awaitingArea`; night start → `night` |
-| `awaitingArea` | as idle | `once(at:)` the earliest of: blink start or end, area deadline | `walkArea` with room → `walkingOut`; no room or deadline passes → `idle` |
+| `idle` | `idle`, or `blink` while blinking | `once(at:)` the earliest of: blink start or end, next walk (if walking is enabled and the chat is closed), night start, reminder wave time | Walk time → `awaitingArea`; night start → `night`; wave time → `waving` |
+| `awaitingArea` | as idle | `once(at:)` the earliest of: blink start or end, area deadline, reminder wave time | `walkArea` with room → `walkingOut`; no room or deadline passes → `idle` |
 | `walkingOut` | alternates `walk`/`idle`, facing left | `every(seconds: 1 / walkFPS)` | Reaches the target → `resting` |
-| `resting` | as idle, facing left | `once(at:)` the earliest of: blink start or end, rest end | Rest ends → `walkingHome` |
+| `resting` | as idle, facing left | `once(at:)` the earliest of: blink start or end, rest end, reminder wave time | Rest ends → `walkingHome` |
 | `walkingHome` | alternates `walk`/`idle`, facing right | `every(seconds: 1 / walkFPS)` | Reaches 0 → `idle` (or `night` if it's night) |
 | `waving` | alternates `wave`/`waveHigh` | `every(seconds: 1 / waveFPS)` | Wave ends → `walkingHome` if away from home, else `idle` or `night` |
 | `cheering` | `armsUp` | `once(at:)` cheer end | Cheer ends → `idle` |
-| `night` | `sleep` | `once(at:)` next `nightEndHour`:00 | That time passes → `idle` |
+| `night` | `sleep` | `once(at:)` the earlier of: next `nightEndHour`:00, reminder wave time | That time passes → `idle`; wave time → `waving` |
 | `paused` | `sleep` if it was `night`, else `idle` | `stopped` | `paused(false)` |
 
 `needsWalkArea` is true in `awaitingArea`, `walkingOut`, `resting` and `walkingHome`, and while
@@ -87,12 +91,13 @@ public enum Activity: Equatable, Sendable {
 |---|---|
 | `tick` | Advances the current activity: blinks, movement, timeouts. See "Ticks" below. |
 | `walkNow` | If `idle`, walking is enabled and the chat is closed: start asking for an area now. Otherwise ignored. |
-| `walkArea(range)` | In `awaitingArea`: if `range` reaches at least `minWalkDistance` left of home (`range.lowerBound <= -minWalkDistance`), pick a target at random in `range.lowerBound ... -minWalkDistance` and start `walkingOut`. Otherwise give up (back to `idle`, next walk rescheduled). While away from home: `nil` snaps home at once (the room is gone); a range that no longer contains the offset clamps the offset into it and starts `walkingHome`. |
+| `walkArea(range)` | `range` is where a walk may **end**; the way there from home is always allowed (the free-walk stage hides the buddy while it passes behind other icons). In `awaitingArea`: if `range.lowerBound <= -minWalkDistance`, pick a target at random in `range.lowerBound ... min(range.upperBound, -minWalkDistance)` and start `walkingOut`. Otherwise give up (back to `idle`, next walk rescheduled). While away from home: `nil` snaps home at once (the room is gone); a range that no longer contains the target starts `walkingHome`. |
 | `clicked` | If away from home or waiting for an area: snap home (offset 0, facing right, `idle`). Waving stops too. |
 | `chatOpened` | Chat counts as open. Snap home if away. From `night` the buddy wakes to `idle`. |
 | `chatClosed` | Chat counts as closed. Next walk is no sooner than `now + afterChatDelay`. |
 | `replyArrived` | From `idle`: `cheering` until `now + cheerLength`. Ignored in other activities. |
 | `reminderDue` | Unless `paused`: `waving` until `now + waveLength`, from wherever it is (it stops walking). |
+| `reminderAt(date)` | Remembers `date − waveLead` as the wave time (or forgets it for `nil`). A tick at or past that time acts like `reminderDue`, then forgets it. A wave time already in the past is ignored. |
 | `paused(true)` | `paused`: snap home, clock `stopped`. Remembers whether it was night. |
 | `paused(false)` | From `paused`: `night` if it's night now, else `idle`. Next blink and next walk are picked fresh from `now`. |
 | `walkingEnabled(false)` | No new walks. In `awaitingArea`: give up. In `walkingOut` or `resting`: start `walkingHome`. |
@@ -105,6 +110,8 @@ when pausing).
 
 On `tick` at `now`:
 
+0. **Reminder wave:** unless `paused`, if a wave time is set and `now` is at or past it, forget it
+   and start `waving` as for `reminderDue`. Skip the other steps for this tick.
 1. **Blinking** (in `idle`, `awaitingArea`, `resting`): if a blink is showing and `now` is at or
    past its end, show `idle`. Otherwise, if `now` is at or past the next blink, show `blink`, set
    the blink end to `now + blinkLength`, and pick the next blink as `now + random(blinkEvery)`.
@@ -141,10 +148,10 @@ Walking needs room, and the engine doesn't know where that is. A `WalkStage` in 
 
 1. The engine sets `needsWalkArea = true` (activity `awaitingArea`).
 2. `BuddyController` sees the change and asks the active stage to `prepare()`. The stretch stage
-   widens the status item, then reports `walkArea(-(width − 22) ... 0)`. The free-walk stage reads
-   the free space on the bar.
-3. The engine walks within that range, reporting `offset` each tick. The stage draws the sprite at
-   home + offset.
+   widens the status item by `walkDistance`, then reports `walkArea(-walkDistance ... 0)`. The
+   free-walk stage reads the free space on the bar and reports where in it a walk may end.
+3. The engine walks from home to a target in that range, reporting `offset` each tick. The stage
+   draws the sprite at home + offset (or hides it while it's behind other icons).
 4. Back home, `needsWalkArea` turns false and the stage `finish()`es: the item shrinks, or the walk
    window hides.
 

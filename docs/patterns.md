@@ -128,7 +128,9 @@ final class SpriteLayerView: NSView {
         CATransaction.setDisableActions(true)        // no implicit 0.25 s animation
         if spriteLayer.contents == nil { spriteLayer.contents = sheet }
         spriteLayer.contentsRect = rect
-        spriteLayer.frame = layerFrame
+        // bounds + position, not frame: frame is undefined once a transform is set.
+        spriteLayer.bounds = CGRect(origin: .zero, size: layerFrame.size)
+        spriteLayer.position = CGPoint(x: layerFrame.midX, y: layerFrame.midY)
         spriteLayer.setAffineTransform(facingLeft ? CGAffineTransform(scaleX: -1, y: 1) : .identity)
         CATransaction.commit()
     }

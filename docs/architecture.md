@@ -26,7 +26,7 @@ decides when the CPU wakes.
  SystemEvents ──paused(Bool)──┐
  StatusItemController ─clicked─┤
  ChatPopoverController ─chat───┤        ┌─────────────────────────┐
- ReminderScheduler ─due────────┼──────> │ BuddyController         │
+ ReminderScheduler ─reminderAt─┼──────> │ BuddyController         │
  WalkStage ─walkArea(range)────┤        │  engine.handle(event)   │
  AnimationClock ─tick──────────┘        └───────────┬─────────────┘
                                                     │ BuddyOutput
@@ -59,8 +59,8 @@ The cards give the exact signatures; this is the map.
 | `StatusItemController` | Aash | `StatusItemController.swift` | T04 | The `NSStatusItem`, clicks, width |
 | `BuddyController` | Aash | `BuddyController.swift` | T04 | Owns the engine, clock and views; routes events |
 | `SystemEvents` | Aash | `SystemEvents.swift` | T05 | Screen sleep, lock, Low Power, occlusion → `paused` |
-| `AppSettings` | Aash | `AppSettings.swift` | T06 | `UserDefaults`-backed settings |
 | `AppMenu`, `LoginItem` | Aash | `AppMenu.swift`, `LoginItem.swift` | T06 | Right-click menu, open at login |
+| `AppSettings` | Aash | `AppSettings.swift` | T08 | `UserDefaults`-backed settings |
 | `WalkStage`, `StretchStage` | Aash | `WalkStage.swift`, `StretchStage.swift` | T08 | Where a walk happens: inside the widened status item |
 | `MenuBarScanner` | Aash | `MenuBarScanner.swift` | T10 | Accessibility read of menus and status items |
 | `FreeSpace` | AashCore | `FreeSpace.swift` | T11 | Pure maths: free intervals on the bar |
@@ -72,7 +72,7 @@ The cards give the exact signatures; this is the map.
 | `SettingsWindowController` | Aash | `SettingsWindowController.swift` | T18 | The settings window |
 | `ReminderPhraseParser` | AashCore | `ReminderPhraseParser.swift` | T20 | "remind me to X at 6" → title + date |
 | `RemindersService` | Aash | `RemindersService.swift` | T21 | EventKit access |
-| `ReminderScheduler` | Aash | `ReminderScheduler.swift` | T23 | Next due reminder → one wave |
+| `ReminderScheduler` | Aash | `ReminderScheduler.swift` | T23 | Finds the next due reminder and sends `reminderAt`; no timer of its own |
 | `ClaudeCodeProvider` | AashAI | `ClaudeCodeProvider.swift` | T24 | `claude -p` as a chat provider |
 
 The placeholder files from Phase 0 (`AashSprites.swift`, `AashAI.swift` and their tests) are
@@ -94,10 +94,12 @@ status item tooltip shows it.
 
 | Key | Type | Default | Card |
 |---|---|---|---|
-| `walkingEnabled` | Bool | true | T06 |
-| `openAtLogin` | Bool | false (mirrors `SMAppService` status) | T06 |
+| `walkingEnabled` | Bool | true | T08 |
+| `walkDistance` | Double (pt) | 120 | T08 |
 | `freeWalkEnabled` | Bool | false | T12 |
 | `chatModel` | String | `gemini-3.5-flash-lite` | T18 |
+
+Open at login isn't stored: `SMAppService.mainApp.status` is the truth (T06).
 
 The Gemini API key is never in `UserDefaults`: it's in the Keychain (service `me.aarshj.aash`,
 account `gemini`).

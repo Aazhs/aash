@@ -60,9 +60,12 @@ log it (section 7), and stop the run.
 
 ## 6. Manual check
 
-If the card has a "Manual check" section, run `./scripts/run.sh`, then ask the user that
-section's question with AskUserQuestion, with the options "Looks right" and "Something's off".
-For "Something's off", send their note to the implementer as a fix round (back to section 3).
+If the card has a "Manual check" section, follow it. Usually that means: run `./scripts/run.sh`,
+then ask the user the section's question with AskUserQuestion, with the options "Looks right" and
+"Something's off". Some sections also ask you to run a measurement while the user does something,
+or to put what the user pastes into a doc; do those steps in the order written.
+
+For "Something's off", send the user's note to the implementer as a fix round (back to section 3).
 
 ## 7. Finish the card
 

@@ -32,7 +32,9 @@ doesn't work, which is why stretch walk is the default and free walk depends on 
   (`patterns.md#status-item`).
 - The item never shows a title or a system image; the sprite view is its only content.
 
-## Stretch walk (default, T08–T09)
+## Stretch walk
+
+The default, built by T08 and T09.
 
 1. The engine asks for room (`needsWalkArea`).
 2. `StretchStage.prepare()` sets `length = 22 + walkDistance` (default 120 pt), then reports
@@ -55,9 +57,9 @@ When the status item can't be seen, the buddy shouldn't animate:
   notifications `com.apple.screenIsLocked` / `com.apple.screenIsUnlocked`), and Low Power Mode
   also pause.
 
-## Free walk (opt-in, T10–T12)
+## Free walk
 
-Free walk is the research doc's original idea: the buddy steps out of its icon and walks along the
+Opt-in, built by T10 to T12. Free walk is the research doc's original idea: the buddy steps out of its icon and walks along the
 empty part of the bar. It needs two things macOS 27 doesn't hand out freely:
 
 1. **Where other things are.** Without the window list, the only route is the Accessibility API,
