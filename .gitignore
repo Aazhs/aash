@@ -1,0 +1,11 @@
+# SwiftPM and app build output
+.build/
+build/
+.swiftpm/
+
+# macOS
+.DS_Store
+
+# Claude Code: personal settings and temporary worktrees stay local
+.claude/settings.local.json
+.claude/worktrees/
