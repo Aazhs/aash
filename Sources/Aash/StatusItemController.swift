@@ -33,6 +33,9 @@ final class StatusItemController: NSObject {
         set { item.length = newValue }
     }
 
+    /// The status bar button, which the chat popover points at.
+    var button: NSStatusBarButton? { item.button }
+
     /// The window that hosts the item, for occlusion and its position on screen.
     var window: NSWindow? { item.button?.window }
 

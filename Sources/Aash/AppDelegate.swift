@@ -9,6 +9,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var settings: AppSettings?
     private var stage: FreeWalkStage?
     private var settingsWindow: SettingsWindowController?
+    private var chat: ChatPopoverController?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let item = StatusItemController()
@@ -23,9 +24,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         systemEvents = events
 
         let controller = BuddyController(statusItem: item, stage: stage)
-        stage.onClick = { [weak controller] in controller?.handle(.clicked) }
         controller.start(walkingEnabled: effectiveWalking())
         buddy = controller
+        chat = ChatPopoverController(
+            anchor: { [weak item] in item?.button }, settings: settings,
+            openSettings: { [weak self] in self?.openSettings() },
+            onEvent: { [weak controller] in controller?.handle($0) })
+        // After `start`, which also sets onLeftClick.
+        item.onLeftClick = { [weak self] in self?.buddyClicked() }
+        stage.onClick = { [weak self] in self?.buddyClicked() }
 
         let menu = AppMenu(settings: settings,
                            isWalking: { [weak controller] in controller?.isWalking ?? false },
@@ -40,6 +47,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         events.onPausedChange = { [weak controller] paused in controller?.handle(.paused(paused)) }
         events.onReduceMotionChange = { [weak self] _ in self?.sendWalking() }
         events.start()
+    }
+
+    private func buddyClicked() {
+        buddy?.handle(.clicked)
+        chat?.toggle()
     }
 
     private func openSettings() {

@@ -29,3 +29,4 @@ needed help, so card models can be tuned.
 | 2026-10-19 | T32 Chat wording | haiku | 0 | Passed review first time. 93 tests. |
 | 2026-10-19 | T16 Keychain store | haiku | 0 | Passed review first time. 100 tests; no Keychain dialog during tests, test items cleaned up. |
 | 2026-10-19 | T18 Settings window | sonnet | 0 | Passed review first time; manual OK (key saved, status persists, walking toggles grey out). Reviewer note: model field may not commit if window closes while focused (add makeFirstResponder(nil) in windowWillClose). |
+| 2026-10-19 | T17 Chat popover | sonnet | 0 | Passed review first time; manual OK (stream, arms-up, cancel). History resets on close by design. User wants an 'About you' personal context (Settings box added to system prompt): write a card after phase 3. |

@@ -1,0 +1,76 @@
+import AppKit
+import AashAI
+import AashCore
+
+/// Owns the chat popover. Views exist only while it is open (docs/performance.md, rule 8).
+@MainActor
+final class ChatPopoverController: NSObject, NSPopoverDelegate {
+    private let anchor: () -> NSView?
+    private let settings: AppSettings
+    private let keychain: KeychainStore
+    private let openSettings: () -> Void
+    private let onEvent: (BuddyEvent) -> Void
+    private var popover: NSPopover?
+    private var viewController: ChatViewController?
+
+    /// `anchor` returns the view the popover points at. `openSettings` is what the "Open Settings"
+    /// button does. `onEvent` receives `.chatOpened`, `.chatClosed` and `.replyArrived`.
+    init(anchor: @escaping () -> NSView?, settings: AppSettings,
+         keychain: KeychainStore = KeychainStore(),
+         openSettings: @escaping () -> Void,
+         onEvent: @escaping (BuddyEvent) -> Void) {
+        self.anchor = anchor
+        self.settings = settings
+        self.keychain = keychain
+        self.openSettings = openSettings
+        self.onEvent = onEvent
+        super.init()
+    }
+
+    /// True while the popover is on screen.
+    var isShown: Bool { popover?.isShown ?? false }
+
+    /// Opens the popover, or closes it if it is open.
+    func toggle() {
+        isShown ? close() : show()
+    }
+
+    /// Opens the popover. Does nothing if it is already open.
+    func show() {
+        guard popover == nil, let anchor = anchor() else { return }
+        let stored = (try? keychain.read(SettingsWindowController.keyAccount)) ?? nil
+        let key = (stored?.isEmpty ?? true) ? nil : stored
+        let provider = GeminiProvider(apiKey: key, model: settings.chatModel)
+        let viewController = ChatViewController(
+            provider: provider, hasKey: key != nil,
+            openSettings: { [weak self] in
+                self?.close()
+                self?.openSettings()
+            },
+            onReply: { [weak self] in self?.onEvent(.replyArrived) })
+        let popover = NSPopover()
+        popover.contentSize = NSSize(width: 340, height: 420)
+        popover.behavior = .transient
+        popover.animates = false
+        popover.delegate = self
+        popover.contentViewController = viewController
+        self.popover = popover
+        self.viewController = viewController
+        NSApp.activate()
+        popover.show(relativeTo: anchor.bounds, of: anchor, preferredEdge: .minY)
+        onEvent(.chatOpened)
+    }
+
+    /// Closes the popover.
+    func close() {
+        popover?.performClose(nil)
+    }
+
+    func popoverDidClose(_ notification: Notification) {
+        viewController?.cancel()
+        popover?.contentViewController = nil
+        popover = nil
+        viewController = nil
+        onEvent(.chatClosed)
+    }
+}
