@@ -11,6 +11,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var settingsWindow: SettingsWindowController?
     private var chat: ChatPopoverController?
     private var reminders: RemindersService?
+    private var scheduler: ReminderScheduler?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let item = StatusItemController()
@@ -29,6 +30,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         buddy = controller
         let reminders = RemindersService()
         self.reminders = reminders
+        let scheduler = ReminderScheduler(reminders: reminders, send: { [weak controller] in controller?.handle($0) })
+        self.scheduler = scheduler
+        reminders.onChange = { [weak scheduler] in scheduler?.refresh() }
+        controller.onReminderWave = { [weak scheduler] in scheduler?.refresh() }
         chat = ChatPopoverController(
             anchor: { [weak item] in item?.button }, settings: settings, reminders: reminders,
             openSettings: { [weak self] in self?.openSettings() },
@@ -44,13 +49,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                            onWalkingChanged: { [weak self] _ in self?.sendWalking() },
                            onOpenSettings: { [weak self] in self?.openSettings() },
                            reduceMotion: { [weak events] in events?.reduceMotion ?? false },
-                           ownItemFrame: { [weak item] in item?.window?.frame })
+                           ownItemFrame: { [weak item] in item?.window?.frame },
+                           remindersToday: { [weak scheduler] in scheduler?.countToday() ?? 0 })
         item.menu = menu.menu
         appMenu = menu
 
-        events.onPausedChange = { [weak controller] paused in controller?.handle(.paused(paused)) }
+        events.onPausedChange = { [weak controller, weak scheduler] paused in
+            controller?.handle(.paused(paused))
+            if !paused { scheduler?.refresh() }   // a reminder may have been due while paused
+        }
         events.onReduceMotionChange = { [weak self] _ in self?.sendWalking() }
         events.start()
+        scheduler.refresh()
     }
 
     private func buddyClicked() {

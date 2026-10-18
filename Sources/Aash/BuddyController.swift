@@ -16,6 +16,8 @@ final class BuddyController {
     private var walking = false
     /// True from asking a stage for room until the walk is over.
     var isWalking: Bool { walking }
+    /// Called each time the buddy starts a reminder wave.
+    var onReminderWave: (() -> Void)?
     private var prepareTask: Task<Void, Never>?
     private var lastActivity: Activity
 
@@ -64,6 +66,7 @@ final class BuddyController {
         if engine.activity != lastActivity {
             lastActivity = engine.activity
             log.debug("activity: \(String(describing: self.lastActivity), privacy: .public)")
+            if lastActivity == .waving { onReminderWave?() }
         }
     }
 }

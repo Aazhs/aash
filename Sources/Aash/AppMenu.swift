@@ -11,6 +11,9 @@ final class AppMenu: NSObject, NSMenuDelegate {
     private let walkNowItem: NSMenuItem
     private let walkingItem: NSMenuItem
     private let freeWalkItem: NSMenuItem
+    private let todayItem: NSMenuItem
+    private let todaySeparator: NSMenuItem
+    private let remindersToday: () -> Int
     private let settings: AppSettings
     private let isWalking: () -> Bool
     private let onOpenChat: () -> Void
@@ -25,9 +28,13 @@ final class AppMenu: NSObject, NSMenuDelegate {
          onWalkNow: @escaping () -> Void, onWalkingChanged: @escaping (Bool) -> Void,
          onOpenSettings: @escaping () -> Void,
          reduceMotion: @escaping () -> Bool,
-         ownItemFrame: @escaping () -> CGRect?) {
+         ownItemFrame: @escaping () -> CGRect?,
+         remindersToday: @escaping () -> Int) {
         let menu = NSMenu()
         menu.autoenablesItems = false
+        let todayItem = NSMenuItem(title: "", action: nil, keyEquivalent: "")
+        todayItem.isEnabled = false
+        let todaySeparator = NSMenuItem.separator()
         let chatItem = NSMenuItem(title: "Chat", action: #selector(openChat(_:)), keyEquivalent: "")
         let walkNowItem = NSMenuItem(title: "Walk now", action: #selector(walkNow(_:)), keyEquivalent: "")
         let walkingItem = NSMenuItem(title: "Walking", action: #selector(toggleWalking(_:)), keyEquivalent: "")
@@ -36,6 +43,8 @@ final class AppMenu: NSObject, NSMenuDelegate {
         let loginItem = NSMenuItem(title: "Open at Login", action: #selector(toggleLogin(_:)), keyEquivalent: "")
         let settingsItem = NSMenuItem(title: "Settings…", action: #selector(openSettings(_:)), keyEquivalent: ",")
         let aboutItem = NSMenuItem(title: "About Aash", action: #selector(about(_:)), keyEquivalent: "")
+        menu.addItem(todayItem)
+        menu.addItem(todaySeparator)
         menu.addItem(chatItem)
         menu.addItem(.separator())
         menu.addItem(walkNowItem)
@@ -56,6 +65,9 @@ final class AppMenu: NSObject, NSMenuDelegate {
         self.walkNowItem = walkNowItem
         self.walkingItem = walkingItem
         self.freeWalkItem = freeWalkItem
+        self.todayItem = todayItem
+        self.todaySeparator = todaySeparator
+        self.remindersToday = remindersToday
         self.settings = settings
         self.isWalking = isWalking
         self.onOpenChat = onOpenChat
@@ -77,6 +89,10 @@ final class AppMenu: NSObject, NSMenuDelegate {
     }
 
     func menuNeedsUpdate(_ menu: NSMenu) {
+        let count = remindersToday()
+        todayItem.title = count == 1 ? "1 reminder today" : "\(count) reminders today"
+        todayItem.isHidden = count == 0
+        todaySeparator.isHidden = count == 0
         loginItem.state = LoginItem.isEnabled ? .on : .off
         let still = reduceMotion()
         walkNowItem.isEnabled = settings.walkingEnabled && !still && !isWalking()

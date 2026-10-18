@@ -38,7 +38,7 @@ with the same `Parallel` group run together. Phase 5 is an outline until `/plan-
 | T35 | [Reminder phrase parser](T35-reminder-parser.md) | 4 | sonnet | sonnet | T20 | — | done |
 | T21 | [Reminders store](T21-reminders-store.md) | 4 | sonnet | sonnet | T35, T36 | — | done |
 | T22 | [Reminders from chat](T22-chat-reminders.md) | 4 | sonnet | sonnet | T21 | — | done |
-| T23 | [Wave before due](T23-due-wave.md) | 4 | sonnet | sonnet | T22 | — | todo |
+| T23 | [Wave before due](T23-due-wave.md) | 4 | sonnet | sonnet | T22 | — | done |
 | T24 | [Ask Claude](T24-ask-claude.md) | 5 | sonnet | sonnet | T23 | — | todo |
 | T25 | [App icon](T25-app-icon.md) | 5 | haiku | sonnet | T23 | — | todo |
 | T26 | [Final pass](T26-final-pass.md) | 5 | sonnet | opus | T24, T25 | — | todo |
