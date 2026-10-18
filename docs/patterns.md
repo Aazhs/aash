@@ -137,7 +137,7 @@ final class SpriteLayerView: NSView {
 
     override func viewDidChangeEffectiveAppearance() {
         super.viewDidChangeEffectiveAppearance()
-        // Dark menu bar: rebuild the sheet with an outline (sprites.md#outline).
+        // Dark and light sheets are identical (no outline), so no rebuild is needed (sprites.md#outline).
     }
 
     override func hitTest(_ point: NSPoint) -> NSView? { nil }   // clicks go to the status button

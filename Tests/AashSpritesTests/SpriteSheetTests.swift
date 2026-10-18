@@ -8,6 +8,8 @@ import Testing
         return try #require(PixelReader(sheet.image))
     }
 
+    private let outlined = SpriteStyle(pixelSize: 4, outline: SpriteStyle.outlineColor)
+
     private func matches(_ p: (r: UInt8, g: UInt8, b: UInt8, a: UInt8), _ hex: String) -> Bool {
         guard let c = RGBA(hex: hex) else { return false }
         return p.r == c.r && p.g == c.g && p.b == c.b && p.a == 255
@@ -15,8 +17,8 @@ import Testing
 
     @Test func lightSheetSize() throws {
         let sheet = try #require(SpriteRenderer.makeSheet(style: .light))
-        #expect(sheet.image.width == 210)
-        #expect(sheet.image.height == 39)
+        #expect(sheet.image.width == 280)
+        #expect(sheet.image.height == 52)
     }
 
     @Test func onePixelSheetSize() throws {
@@ -26,7 +28,7 @@ import Testing
     }
 
     @Test func idleHairPixel() throws {
-        let p = try reader(.light).pixel(x: 9, y: 3)
+        let p = try reader(.light).pixel(x: 14, y: 6)
         #expect(matches(p, "#2a1b2e"), "\(p)")
     }
 
@@ -38,23 +40,28 @@ import Testing
         let r = try reader(.light)
         for x in 0..<r.width {
             #expect(r.pixel(x: x, y: 0).a == 0, "row 0 x \(x)")
-            #expect(r.pixel(x: x, y: 38).a == 0, "row 38 x \(x)")
+            #expect(r.pixel(x: x, y: 51).a == 0, "row 51 x \(x)")
         }
     }
 
-    @Test func darkOutlineAboveHair() throws {
-        let p = try reader(.dark).pixel(x: 9, y: 0)
-        #expect(p.a == 140, "\(p)")
-        #expect(abs(Int(p.r) - 130) <= 2 && abs(Int(p.g) - 126) <= 2 && abs(Int(p.b) - 133) <= 2, "\(p)")
+    @Test func darkHasNoOutline() throws {
+        let p = try reader(.dark).pixel(x: 14, y: 2)
+        #expect(p.a == 0, "\(p)")
+        #expect(SpriteStyle.dark == SpriteStyle.light)
+    }
+
+    @Test func outlinePassStillWorks() throws {
+        let p = try reader(outlined).pixel(x: 14, y: 2)
+        #expect(matches(p, "#ede6f2"), "\(p)")
     }
 
     @Test func outlineDoesNotCoverArt() throws {
-        let p = try reader(.dark).pixel(x: 9, y: 3)
+        let p = try reader(outlined).pixel(x: 14, y: 6)
         #expect(matches(p, "#2a1b2e"), "\(p)")
     }
 
     @Test func secondFrameIsBlink() throws {
-        let p = try reader(.light).pixel(x: 42, y: 12)
+        let p = try reader(.light).pixel(x: 58, y: 18)
         #expect(matches(p, "#c08f74"), "\(p)")
     }
 

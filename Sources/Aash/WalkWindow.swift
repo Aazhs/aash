@@ -48,7 +48,7 @@ final class WalkWindow {
         let scale = screen.backingScaleFactor
         let barHeight = screen.frame.maxY - screen.visibleFrame.maxY
         let height = barHeight > 0 ? barHeight : NSStatusBar.system.thickness
-        let width: CGFloat = scale >= 2 ? 15 : 16   // matches SpriteLayerView.spriteWidth
+        let width: CGFloat = scale >= 2 ? 20 : 16   // matches SpriteLayerView.spriteWidth
         let x = (screenX * scale).rounded() / scale
         let rect = NSRect(x: x, y: screen.frame.maxY - height, width: width, height: height)
         // Move only when the position changes; most ticks change just the pose.

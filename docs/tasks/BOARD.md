@@ -21,7 +21,7 @@ with the same `Parallel` group run together. Phases 3–5 are outlines until `/p
 | T27 | [Respect Reduce Motion](T27-reduce-motion.md) | 2 | sonnet | sonnet | T12 | — | done |
 | T13 | [Check: walking budget](T13-walking-budget.md) | 2 | haiku | sonnet | T27 | — | done |
 | T28 | [Walk out of the icon](T28-walk-out-of-icon.md) | 2 | sonnet | sonnet | T13 | — | done |
-| T29 | [Bigger buddy, solid outline](T29-bigger-buddy.md) | 2 | sonnet | sonnet | T28 | — | todo |
+| T29 | [Bigger buddy, solid outline](T29-bigger-buddy.md) | 2 | sonnet | sonnet | T28 | — | done |
 | T30 | [Free walk after window change](T30-walk-after-window-change.md) | 2 | sonnet | sonnet | T29 | — | todo |
 | T14 | [Record Gemini responses](T14-gemini-fixtures.md) | 3 | haiku | sonnet | T13 | — | todo |
 | T15 | [Gemini client](T15-gemini-client.md) | 3 | sonnet | sonnet | T14 | — | todo |

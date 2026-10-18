@@ -70,31 +70,24 @@ waveHigh, sleep`. The sheet's layout depends on it.
 - Each sprite pixel is `pixelSize` × `pixelSize` device pixels. Whole numbers only.
 - Frame `i` of `n` has `contentsRect = CGRect(x: i/n, y: 0, width: 1/n, height: 1)`.
 - Sheet size in device pixels: `(10 × n × pixelSize) × (13 × pixelSize)`. For 7 frames at
-  `pixelSize` 3: 210 × 39.
+  `pixelSize` 4: 280 × 52.
 
 ## Outline
 
-A dark menu bar hides the dark hair, trousers and shoes, so the dark-appearance sheet adds an
-outline:
-
-- An outline pixel is any transparent cell in the 10 × 13 cell, margin included, that touches an
-  opaque pixel in any of the 8 directions.
-- Colour `#ede6f2` at alpha 140 out of 255 (about 55%).
-- The light-appearance sheet has no outline; its margin stays transparent.
-
-The status button's `effectiveAppearance` decides which sheet to use:
-`bestMatch(from: [.darkAqua, .aqua]) == .darkAqua` → outlined sheet. It's rebuilt only when the
-appearance changes (`viewDidChangeEffectiveAppearance`), never per frame.
+The buddy has no outline. The dark-appearance sheet is drawn exactly like the light one and the
+1-pixel margin stays transparent. `SpriteStyle.outline` and the renderer's outline pass stay in
+the code but no style uses them.
 
 ## Size on screen
 
 | Display | `pixelSize` (device px) | Sprite pixel | Shown on screen |
 |---|---|---|---|
-| Retina (`backingScaleFactor` 2) | 3 | 1.5 pt | the whole 10 × 13 cell: 15 × 19.5 pt |
+| Retina (`backingScaleFactor` 2) | 4 | 2 pt | the whole 10 × 13 cell: 20 × 26 pt |
 | Non-Retina (scale 1) | 2 | 2 pt | the no-outline sheet, without its margin: 16 × 22 pt |
 
 - The status item is 22 pt wide (`length = 22`); its button is 22 × 22 pt on macOS 27. The sprite is
   centred in it, at whole device pixels.
+- On Retina the 26 pt cell is taller than the 24 pt bar, so about 1 pt of the outline margin at the top and bottom is clipped; the 8 × 11 art (16 × 22 pt) is not.
 - Without the margin means the frame's `contentsRect` is inset by 1 sprite pixel on every side:
   1/10 of the cell's width and 1/13 of its height.
 

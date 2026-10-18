@@ -21,6 +21,7 @@ didn't. Don't rewrite old rows; add a new one that replaces them.
 | 2026-10-18 | `walkArea` means where a walk may end; the way there is always allowed. | Free walk can then pass behind icons without the engine knowing about icons. |
 | 2026-10-18 | The reminder wave goes through the engine (`reminderAt`), with no timer of its own. | Keeps the one-clock rule. |
 | 2026-10-18 | New frames `blink`, `wave`, `waveHigh` and `sleep`; closed eyes `#c08f74`; dark-bar outline `#ede6f2` at 55%. | Chosen from previews at real menu bar size. An outline only around dark pixels filled the gap between the legs. |
+| 2026-10-18 | T29: Retina pixelSize 4 (20x26 pt cell); no outline on dark or light bars. | Manual check: the outline looked like a white border. The outline pass and `SpriteStyle.outline` stay, unused. |
 | 2026-10-18 | Opus runs only where judgment matters: `/plan-phase`, `/card`, the T04, T12 and T26 reviews, and T12's implementation. `Agent(model:opus)` asks first. | Pro plan limits. Everything else runs on Sonnet or Haiku. |
 | 2026-10-18 | App name Aash, bundle id `me.aarshj.aash`. | From the folder name and the user's domain. Rename before T06 if wanted: the login item and permissions use the bundle id. |
 | 2026-10-18 | No notch handling. `FreeWalkStage` passes no `blocked` ranges; `MenuBarLayout.blocked` stays in `AashCore`. | The only target Mac is a MacBook Air M1, which has no notch. |

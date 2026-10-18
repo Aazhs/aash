@@ -37,8 +37,8 @@ final class SpriteLayerView: NSView {
         effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
     }
 
-    /// Width of the drawn sprite in points: 15 on Retina, 16 on a non-Retina screen.
-    var spriteWidth: CGFloat { scale >= 2 ? 15 : 16 }
+    /// Width of the drawn sprite in points: 20 on Retina, 16 on a non-Retina screen.
+    var spriteWidth: CGFloat { scale >= 2 ? 20 : 16 }
 
     /// Shows `frame` with its left edge `x` points from this view's left edge, centred vertically.
     func show(_ frame: SpriteFrame, facingLeft: Bool, x: CGFloat) {
