@@ -16,7 +16,7 @@ with the same `Parallel` group run together. Phases 3–5 are outlines until `/p
 | T08 | [Stretch walk](T08-stretch-walk.md) | 2 | sonnet | sonnet | T07 | — | done |
 | T09 | [Walk safety](T09-walk-safety.md) | 2 | sonnet | sonnet | T08 | — | done |
 | T10 | [Accessibility probe](T10-accessibility-probe.md) | 2 | sonnet | sonnet | T09 | — | done |
-| T11 | [Free-space maths](T11-free-space.md) | 2 | sonnet | sonnet | T10 | — | todo |
+| T11 | [Free-space maths](T11-free-space.md) | 2 | sonnet | sonnet | T10 | — | done |
 | T12 | [Free walk](T12-free-walk.md) | 2 | opus | opus | T11 | — | todo |
 | T13 | [Check: walking budget](T13-walking-budget.md) | 2 | haiku | sonnet | T12 | — | todo |
 | T14 | [Record Gemini responses](T14-gemini-fixtures.md) | 3 | haiku | sonnet | T13 | — | todo |
