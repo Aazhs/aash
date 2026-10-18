@@ -1,4 +1,5 @@
 import AppKit
+import Darwin
 import AashAI
 import AashCore
 
@@ -72,5 +73,13 @@ final class ChatPopoverController: NSObject, NSPopoverDelegate {
         popover = nil
         viewController = nil
         onEvent(.chatClosed)
+        Self.releaseFreedMemory()
+    }
+
+    /// Returns freed malloc pages to the system once the chat's objects are gone.
+    private static func releaseFreedMemory() {
+        // The views are freed when the autorelease pool drains at the end of this run-loop turn,
+        // so the relief has to run on the next turn.
+        RunLoop.main.perform { _ = malloc_zone_pressure_relief(nil, 0) }
     }
 }

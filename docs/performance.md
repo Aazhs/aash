@@ -62,4 +62,5 @@ Usual suspects, most likely first:
 | Wake-ups high while idle | A blink or walk schedule recomputed as `.every` instead of `.once`; a second timer; an observer that triggers ticks |
 | CPU high while idle | An implicit layer animation (missing `setDisableActions`); a sheet rebuilt every frame |
 | Memory grows after chatting | The popover, its view controller or the stream task is still referenced |
+| Memory stays high after chatting, but heap shows no chat objects | Freed malloc pages not yet returned; ChatPopoverController asks for them back on close (T34) |
 | CPU high while paused | A path that doesn't check `paused`; the clock not stopped |

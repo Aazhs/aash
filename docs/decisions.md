@@ -34,3 +34,4 @@ didn't. Don't rewrite old rows; add a new one that replaces them.
 | 2026-10-18 | Multi-turn history is sent as an array of steps (`user_input` / `model_output` with `content: [{type: text, text}]`), `store: false`. T14 records the shape that works. | Google's stateless-conversation docs describe steps; role/content turns were not found in the reference. |
 | 2026-10-18 | `KeychainStore` uses the file-based login Keychain, without `kSecUseDataProtectionKeychain`. | The data-protection keychain needs entitlements and a provisioning profile; a SwiftPM build gets -34018 (TN3137, Apple Developer Forums 130264). |
 | 2026-10-18 | The chat popover and its views exist only while open; history is capped at the last 20 messages. | Memory budget (`docs/performance.md`, rule 8). |
+| 2026-10-19 | Closing the chat calls malloc_zone_pressure_relief once, on the next run-loop turn. | T19: 38 MB after close with no chat objects alive; 21 MB of it was freed Malloc Small pages. |
