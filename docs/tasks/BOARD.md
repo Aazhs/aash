@@ -25,7 +25,7 @@ with the same `Parallel` group run together. Phases 4–5 are outlines until `/p
 | T30 | [Free walk after window change](T30-walk-after-window-change.md) | 2 | sonnet | sonnet | T29 | — | done |
 | T14 | [Record Gemini responses](T14-gemini-fixtures.md) | 3 | haiku | sonnet | T13 | — | done |
 | T31 | [Chat types and SSE parser](T31-chat-types-sse.md) | 3 | sonnet | sonnet | T13 | — | done |
-| T15 | [Gemini client](T15-gemini-client.md) | 3 | sonnet | sonnet | T14, T31 | — | todo |
+| T15 | [Gemini client](T15-gemini-client.md) | 3 | sonnet | sonnet | T14, T31 | — | done |
 | T32 | [Chat wording](T32-chat-wording.md) | 3 | haiku | sonnet | T31 | — | todo |
 | T16 | [Keychain store](T16-keychain.md) | 3 | haiku | sonnet | T13 | — | todo |
 | T18 | [Settings window](T18-settings-window.md) | 3 | sonnet | sonnet | T16 | — | todo |

@@ -25,3 +25,4 @@ needed help, so card models can be tuned.
 | 2026-10-18 | T30 Free walk after window change | sonnet | 0 | Passed review first time. Manual OK: app switch narrowed visible to -481, buddy kept walking and rested at the new edge (log confirmed). |
 | 2026-10-18 | T14 Record Gemini responses | haiku | 0 | Passed review first time. Step-array two-turn shape accepted; bad key is HTTP 400 with the message at `[0].error.message`. Corrected the `output_text` bullet in ai.md. |
 | 2026-10-19 | T31 Chat types and SSE parser | sonnet | 0 | Passed review first time. 71 tests, 0 warnings. |
+| 2026-10-19 | T15 Gemini client | sonnet | 1 review | Fix: StubURLProtocol state moved from nonisolated(unsafe) vars into a locked Box. bad-key.json is a one-element array; parser accepts both. Stub needs Content-Type text/event-stream to stream. Left over: `URL(string:)!` constant default baseURL in GeminiProvider.swift:18 breaks the no-force-unwrap rule; fix in T26. |
