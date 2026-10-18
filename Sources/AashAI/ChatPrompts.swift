@@ -1,3 +1,5 @@
+import Foundation
+
 /// The fixed wording of the chat requests.
 public enum ChatPrompts {
     /// The buddy's voice, sent with every chat request.
@@ -37,4 +39,37 @@ public enum ChatPrompts {
         // `prefix` counts Characters, so the cut never splits an emoji.
         "\(action.instruction)\n\n\(String(text.prefix(clipboardLimit)))"
     }
+
+    /// The line after a reminder is added: "Added: Call mum · today 7:00 PM".
+    public static func reminderAdded(title: String, due: Date, now: Date, calendar: Calendar) -> String {
+        func formatter(_ format: String) -> DateFormatter {
+            let formatter = DateFormatter()
+            formatter.locale = Locale(identifier: "en_US_POSIX")
+            formatter.calendar = calendar
+            formatter.timeZone = calendar.timeZone
+            formatter.dateFormat = format
+            return formatter
+        }
+        let day: String
+        if calendar.isDate(due, inSameDayAs: now) {
+            day = "today"
+        } else if let tomorrow = calendar.date(byAdding: .day, value: 1, to: now), calendar.isDate(due, inSameDayAs: tomorrow) {
+            day = "tomorrow"
+        } else {
+            day = formatter("EEE d MMM").string(from: due)
+        }
+        return "Added: \(title) \u{00B7} \(day) \(formatter("h:mm a").string(from: due))"
+    }
+
+    /// The line after Undo: "Removed: Call mum."
+    public static func reminderRemoved(title: String) -> String {
+        "Removed: \(title)."
+    }
+
+    /// Shown when Reminders access is off.
+    public static let remindersNoAccess = "Aash can't use Reminders yet. Allow it in System Settings → Privacy & Security → Reminders."
+    /// Shown when a reminder couldn't be saved.
+    public static let reminderFailed = "Couldn't add that to Reminders. Try again?"
+    /// Shown when Undo couldn't remove the reminder.
+    public static let reminderUndoFailed = "Couldn't remove it. You can delete it in Reminders."
 }

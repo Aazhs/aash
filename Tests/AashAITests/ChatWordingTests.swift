@@ -59,4 +59,33 @@ import Testing
     @Test func serverMessageIsNotShown() {
         #expect(!ChatError.server(status: 500, message: "secret detail").userMessage().contains("secret"))
     }
+
+    private static var ist: Calendar {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "Asia/Kolkata") ?? .current
+        return calendar
+    }
+
+    private static func ist(_ day: Int, _ hour: Int) throws -> Date {
+        try #require(ist.date(from: DateComponents(year: 2026, month: 10, day: day, hour: hour)))
+    }
+
+    @Test func reminderAddedToday() throws {
+        let line = ChatPrompts.reminderAdded(title: "Call mum", due: try Self.ist(18, 19), now: try Self.ist(18, 10), calendar: Self.ist)
+        #expect(line == "Added: Call mum \u{00B7} today 7:00 PM")
+    }
+
+    @Test func reminderAddedTomorrow() throws {
+        let line = ChatPrompts.reminderAdded(title: "Call mum", due: try Self.ist(19, 9), now: try Self.ist(18, 10), calendar: Self.ist)
+        #expect(line == "Added: Call mum \u{00B7} tomorrow 9:00 AM")
+    }
+
+    @Test func reminderAddedLater() throws {
+        let line = ChatPrompts.reminderAdded(title: "Pay rent", due: try Self.ist(23, 9), now: try Self.ist(18, 10), calendar: Self.ist)
+        #expect(line == "Added: Pay rent \u{00B7} Fri 23 Oct 9:00 AM")
+    }
+
+    @Test func reminderRemovedLine() {
+        #expect(ChatPrompts.reminderRemoved(title: "Pay rent") == "Removed: Pay rent.")
+    }
 }
