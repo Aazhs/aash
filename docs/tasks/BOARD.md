@@ -2,7 +2,7 @@
 
 `/next` takes the first `todo` row whose `Needs` are all `done`. Status is one of `todo`, `doing`,
 `done`, `blocked` (with a reason). `Model` picks the implementer, `Reviewer` the reviewer. Cards
-with the same `Parallel` group run together. Phases 3–5 are outlines until `/plan-phase N` runs.
+with the same `Parallel` group run together. Phases 4–5 are outlines until `/plan-phase N` runs.
 
 | ID | Card | Phase | Model | Reviewer | Needs | Parallel | Status |
 |---|---|---|---|---|---|---|---|
@@ -24,11 +24,14 @@ with the same `Parallel` group run together. Phases 3–5 are outlines until `/p
 | T29 | [Bigger buddy, solid outline](T29-bigger-buddy.md) | 2 | sonnet | sonnet | T28 | — | done |
 | T30 | [Free walk after window change](T30-walk-after-window-change.md) | 2 | sonnet | sonnet | T29 | — | done |
 | T14 | [Record Gemini responses](T14-gemini-fixtures.md) | 3 | haiku | sonnet | T13 | — | todo |
-| T15 | [Gemini client](T15-gemini-client.md) | 3 | sonnet | sonnet | T14 | — | todo |
+| T31 | [Chat types and SSE parser](T31-chat-types-sse.md) | 3 | sonnet | sonnet | T13 | — | todo |
+| T15 | [Gemini client](T15-gemini-client.md) | 3 | sonnet | sonnet | T14, T31 | — | todo |
+| T32 | [Chat wording](T32-chat-wording.md) | 3 | haiku | sonnet | T31 | — | todo |
 | T16 | [Keychain store](T16-keychain.md) | 3 | haiku | sonnet | T13 | — | todo |
-| T17 | [Chat popover](T17-chat-popover.md) | 3 | sonnet | sonnet | T15, T16 | — | todo |
 | T18 | [Settings window](T18-settings-window.md) | 3 | sonnet | sonnet | T16 | — | todo |
-| T19 | [Check: chat memory](T19-chat-budget.md) | 3 | haiku | sonnet | T17, T18 | — | todo |
+| T17 | [Chat popover](T17-chat-popover.md) | 3 | sonnet | sonnet | T15, T32, T18 | — | todo |
+| T33 | [Clipboard buttons, Chat menu item, reopen](T33-chat-clipboard-and-menu.md) | 3 | sonnet | sonnet | T17 | — | todo |
+| T19 | [Check: chat memory](T19-chat-budget.md) | 3 | haiku | sonnet | T33 | — | todo |
 | T20 | [Reminder phrase parser](T20-reminder-parser.md) | 4 | sonnet | sonnet | T19 | — | todo |
 | T21 | [Reminders store](T21-reminders-store.md) | 4 | sonnet | sonnet | T19 | — | todo |
 | T22 | [Reminders from chat](T22-chat-reminders.md) | 4 | sonnet | sonnet | T20, T21 | — | todo |

@@ -65,10 +65,12 @@ The cards give the exact signatures; this is the map.
 | `MenuBarScanner` | Aash | `MenuBarScanner.swift` | T10 | Accessibility read of menus and status items |
 | `FreeSpace` | AashCore | `FreeSpace.swift` | T11 | Pure maths: free intervals on the bar |
 | `FreeWalkStage`, `WalkWindow` | Aash | `FreeWalkStage.swift`, `WalkWindow.swift` | T12 | Walking over the real free space |
-| `ChatMessage`, `ChatProvider`, `ChatError` | AashAI | `Chat*.swift` | T15 | Provider-neutral chat |
-| `GeminiProvider`, `ServerSentEvents` | AashAI | `GeminiProvider.swift`, `ServerSentEvents.swift` | T15 | Gemini Interactions API, streaming |
+| `ChatMessage`, `ChatProvider`, `ChatError` | AashAI | `ChatMessage.swift`, `ChatProvider.swift` | T31 | Provider-neutral chat |
+| `ServerSentEventParser` | AashAI | `ServerSentEvents.swift` | T31 | SSE lines → events |
+| `ChatPrompts`, `ChatError.userMessage` | AashAI | `ChatPrompts.swift`, `ChatError+Message.swift` | T32 | The buddy's voice, clipboard actions, error lines |
+| `GeminiProvider`, `GeminiWire` | AashAI | `GeminiProvider.swift`, `GeminiWire.swift` | T15 | Gemini Interactions API, streaming |
 | `KeychainStore` | AashAI | `KeychainStore.swift` | T16 | API keys |
-| `ChatPopoverController` | Aash | `ChatPopoverController.swift` | T17 | The popover UI |
+| `ChatPopoverController`, `ChatViewController` | Aash | `ChatPopoverController.swift`, `ChatViewController.swift` | T17, T33 | The popover UI |
 | `SettingsWindowController` | Aash | `SettingsWindowController.swift` | T18 | The settings window |
 | `ReminderPhraseParser` | AashCore | `ReminderPhraseParser.swift` | T20 | "remind me to X at 6" → title + date |
 | `RemindersService` | Aash | `RemindersService.swift` | T21 | EventKit access |
