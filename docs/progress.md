@@ -27,3 +27,4 @@ needed help, so card models can be tuned.
 | 2026-10-19 | T31 Chat types and SSE parser | sonnet | 0 | Passed review first time. 71 tests, 0 warnings. |
 | 2026-10-19 | T15 Gemini client | sonnet | 1 review | Fix: StubURLProtocol state moved from nonisolated(unsafe) vars into a locked Box. bad-key.json is a one-element array; parser accepts both. Stub needs Content-Type text/event-stream to stream. Left over: `URL(string:)!` constant default baseURL in GeminiProvider.swift:18 breaks the no-force-unwrap rule; fix in T26. |
 | 2026-10-19 | T32 Chat wording | haiku | 0 | Passed review first time. 93 tests. |
+| 2026-10-19 | T16 Keychain store | haiku | 0 | Passed review first time. 100 tests; no Keychain dialog during tests, test items cleaned up. |
