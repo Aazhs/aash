@@ -85,6 +85,12 @@ Rules for free walk:
 - No notch handling. Aash runs only on a MacBook Air M1, which has no notch, so `FreeWalkStage`
   passes no `blocked` ranges. `MenuBarLayout.blocked` stays in `AashCore` (T11) and is ready if
   that ever changes.
+- If our icon is the leftmost status item, the buddy may cover it while out, so a walk starts and
+  ends at the icon. Otherwise it stays hidden until it is clear of the icons to its left.
+- `targets` is only the far-left band (two sprite widths) of the visible range, because the engine
+  picks a target at random and a whole-range pick often turned around far from the menus' edge.
+  The band is only used to pick the target at the start of a walk; re-scans report `visible`, so an
+  app switch doesn't send the buddy home early.
 
 ### Walk window settings (T12)
 

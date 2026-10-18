@@ -26,7 +26,7 @@ public struct MenuBarLayout: Equatable, Sendable {
 
 /// A free walk, as offsets from home (negative = left).
 public struct FreeWalkPlan: Equatable, Sendable {
-    /// Where a walk may end. Pass it to the engine as `walkArea`.
+    /// Where a walk may end: the far-left band of `visible`. Pass it to the engine as `walkArea`.
     public var targets: ClosedRange<Double>
     /// Offsets at which the buddy is drawn. Between `visible.upperBound` and 0 it's behind icons.
     public var visible: ClosedRange<Double>
@@ -40,10 +40,11 @@ public enum FreeSpace {
         let screen = layout.screen
         // Without menu information, keep to the right half of the screen.
         let menusEnd = layout.appMenusMaxX ?? screen.lowerBound + (screen.upperBound - screen.lowerBound) / 2
-        var left = menusEnd + margin
+        // The last menu's frame already carries its own padding, so the sprite may start right at its edge.
+        var left = menusEnd
         let right = layout.statusItemsMinX - margin - spriteWidth
 
-        let windowLow = left - margin
+        let windowLow = left
         let windowHigh = right + spriteWidth + margin
         for b in layout.blocked.sorted(by: { $0.lowerBound < $1.lowerBound })
         where b.lowerBound <= windowHigh && b.upperBound >= windowLow {
@@ -54,6 +55,9 @@ public enum FreeSpace {
         guard right - left >= minWalkDistance else { return nil }
 
         let visible = (left - layout.homeSpriteX)...(right - layout.homeSpriteX)
-        return FreeWalkPlan(targets: visible, visible: visible)
+        // The engine picks a target at random in `targets`. Aiming at the far-left band, not the
+        // whole stretch, makes every walk reach the end of the free space (the menus' edge).
+        let band = (left - layout.homeSpriteX)...min(right - layout.homeSpriteX, left - layout.homeSpriteX + spriteWidth * 2)
+        return FreeWalkPlan(targets: band, visible: visible)
     }
 }

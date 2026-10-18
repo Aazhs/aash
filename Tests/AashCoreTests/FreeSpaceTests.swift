@@ -16,14 +16,15 @@ import Testing
 
     @Test func typicalBar() throws {
         let p = try #require(plan(layout()))
-        #expect(close(p.visible.lowerBound, 428 - 1021.5))
+        #expect(close(p.visible.lowerBound, 420 - 1021.5))
         #expect(close(p.visible.upperBound, 877 - 1021.5))
-        #expect(p.targets == p.visible)
+        #expect(close(p.targets.lowerBound, p.visible.lowerBound))
+        #expect(close(p.targets.upperBound, p.visible.lowerBound + 30))
     }
 
     @Test func unknownMenusUseTheRightHalf() throws {
         let p = try #require(plan(layout(menus: nil)))
-        #expect(close(p.visible.lowerBound, 728 - 1021.5))
+        #expect(close(p.visible.lowerBound, 720 - 1021.5))
     }
 
     @Test func crowdedBarHasNoPlan() {
@@ -44,6 +45,11 @@ import Testing
     @Test func ourItemIsLeftmost() throws {
         let p = try #require(plan(layout(items: 1010)))
         #expect(close(p.visible.upperBound, 987 - 1021.5))
+    }
+
+    @Test func homeIsTheRightEnd() throws {
+        let p = try #require(plan(layout(items: 1021.5 + 8 + 15)))
+        #expect(close(p.visible.upperBound, 0))
     }
 
     @Test func tinyGapIsNil() {

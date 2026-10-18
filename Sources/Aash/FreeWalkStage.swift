@@ -115,9 +115,11 @@ final class FreeWalkStage: WalkStage {
     private func rescan() {
         guard mode == .free else { return }
         // A nil plan hides the buddy until it's home: the old free space may now be covered.
+        // Report `visible`, not the target band: the band only picks the target, and an app switch
+        // that moves it must not send a buddy that is already out back home.
         plan = measure()
         window?.appearance = statusItem.spriteView.effectiveAppearance
-        onRoomChanged?(plan?.targets)
+        onRoomChanged?(plan?.visible)
     }
 
     /// Scans the bar and plans a walk; nil (with the reason logged) when the scan isn't believable.
@@ -138,20 +140,28 @@ final class FreeWalkStage: WalkStage {
             return reject("zero-size frame")
         }
         let own = itemWindow.frame
-        guard extras.contains(where: { own.contains(CGPoint(x: $0.frame.midX, y: $0.frame.midY)) }) else {
+        let ownCentre = CGPoint(x: own.midX, y: own.midY)
+        guard let ownItem = extras.first(where: { $0.frame.contains(ownCentre) }) else {
             return reject("own item missing from scan")
         }
+        let others = extras.filter { $0.frame != ownItem.frame }
         let menusMaxX = menus.map(\.frame.maxX).max() ?? screen.frame.minX
-        let itemsMinX = min(extras.map(\.frame.minX).min() ?? own.minX, own.minX)
-        guard menusMaxX < itemsMinX else { return reject("menus reach the status items") }
 
         let inWindow = statusItem.spriteView.convert(NSPoint(x: statusItem.spriteX(offset: 0), y: 0), to: nil)
         let home = itemWindow.convertPoint(toScreen: inWindow).x
+        let spriteWidth = Double(statusItem.spriteView.spriteWidth)
+        let margin = 8.0
+        // Our own icon is empty while the buddy is out, so it may walk over it; only icons to
+        // our left hide it.
+        let leftOthers = others.filter { $0.frame.midX < ownItem.frame.midX }
+        let itemsMinX = leftOthers.map(\.frame.minX).min() ?? CGFloat(Double(home) + spriteWidth + margin)
+        guard menusMaxX < itemsMinX else { return reject("menus reach the status items") }
+
         // Nothing blocked: the only Mac this runs on (MacBook Air M1) has no notch.
         let layout = MenuBarLayout(screen: Double(screen.frame.minX)...Double(screen.frame.maxX),
                                    appMenusMaxX: Double(menusMaxX), statusItemsMinX: Double(itemsMinX),
                                    homeSpriteX: Double(home))
-        guard let found = FreeSpace.plan(for: layout, spriteWidth: Double(statusItem.spriteView.spriteWidth)) else {
+        guard let found = FreeSpace.plan(for: layout, spriteWidth: spriteWidth, margin: margin) else {
             return reject("free space too short")
         }
         homeScreenX = home
