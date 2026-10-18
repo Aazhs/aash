@@ -136,11 +136,19 @@ Claude plan. Rules:
   uses a subscription login. So instead, run in an empty temporary folder with
   `claude -p --model haiku --tools "" --strict-mcp-config --disable-slash-commands
   --no-session-persistence --system-prompt "<the voice above>" --output-format stream-json
-  --verbose --include-partial-messages "<question>"`.
-- **Streaming:** text deltas are lines whose `type` is `stream_event` with
-  `event.delta.type == "text_delta"`; the text is `event.delta.text`. The last line is a `result`.
-- **Cost check first.** T24 measures start-up time and memory with `/usr/bin/time -l` before wiring
-  it in. If a reply takes more than about 5 s to start, it stays an explicit button, never the default.
+  --verbose --include-partial-messages -- "<question>"`. The `--` lets a question start with `-`.
+- **Streaming:** one JSON object per line. Text deltas are lines whose `type` is `stream_event`,
+  with `event.type == "content_block_delta"` and `event.delta.type == "text_delta"`; the text is
+  `event.delta.text`. The last line has `type == "result"`, with `is_error`, `api_error_status`
+  and `result` (the whole reply, or a message for people). Recorded in `Tests/Fixtures/claude/`.
+- **Only the question goes.** Ask Claude sends the typed question, not the chat history. Its
+  answer joins the popover's history, so a following Gemini message sees it.
+- **Finding it:** `~/.local/bin/claude`, `/opt/homebrew/bin/claude`, `/usr/local/bin/claude`,
+  checked when the popover opens (three `stat` calls). No login shell runs at launch.
+- **Measured cost (19 Oct 2026, Claude Code 2.1.302, M1):** first text after 1.7 s, finished
+  after 2.8 s; peak memory footprint 160 MB (maximum resident set 274 MB) in the `claude` process.
+  Under the 5 s and 300 MB limits, so it ships, but only as an explicit button, off by default.
+  Aash's own footprint doesn't change; closing the popover sends the process `SIGTERM`.
 
 Flags are from the [CLI reference](https://code.claude.com/docs/en/cli-reference) and
 [headless docs](https://code.claude.com/docs/en/headless), read 18 Oct 2026.

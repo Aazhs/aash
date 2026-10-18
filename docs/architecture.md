@@ -78,7 +78,7 @@ The cards give the exact signatures; this is the map.
 | `RemindersService` | Aash | `RemindersService.swift` | T21 | EventKit access |
 | `ReminderIntent` | Aash | `ReminderIntent.swift` | T22 | Chat message → parser or Gemini → Reminders, and Undo |
 | `ReminderScheduler` | Aash | `ReminderScheduler.swift` | T23 | Finds the next due reminder and sends `reminderAt`; no timer of its own |
-| `ClaudeCodeProvider` | AashAI | `ClaudeCodeProvider.swift` | T24 | `claude -p` as a chat provider |
+| `ClaudeCodeProvider` | AashAI | `ClaudeCodeProvider.swift` | T37 | `claude -p` as a chat provider; T24 adds the Ask Claude button |
 
 The placeholder files from Phase 0 (`AashSprites.swift`, `AashAI.swift` and their tests) are
 deleted by the first card that adds real code to that target. `AashCore.version` stays: the

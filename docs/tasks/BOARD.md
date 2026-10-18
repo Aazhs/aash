@@ -2,7 +2,7 @@
 
 `/next` takes the first `todo` row whose `Needs` are all `done`. Status is one of `todo`, `doing`,
 `done`, `blocked` (with a reason). `Model` picks the implementer, `Reviewer` the reviewer. Cards
-with the same `Parallel` group run together. Phase 5 is an outline until `/plan-phase 5` runs.
+with the same `Parallel` group run together.
 
 | ID | Card | Phase | Model | Reviewer | Needs | Parallel | Status |
 |---|---|---|---|---|---|---|---|
@@ -39,6 +39,8 @@ with the same `Parallel` group run together. Phase 5 is an outline until `/plan-
 | T21 | [Reminders store](T21-reminders-store.md) | 4 | sonnet | sonnet | T35, T36 | — | done |
 | T22 | [Reminders from chat](T22-chat-reminders.md) | 4 | sonnet | sonnet | T21 | — | done |
 | T23 | [Wave before due](T23-due-wave.md) | 4 | sonnet | sonnet | T22 | — | done |
-| T24 | [Ask Claude](T24-ask-claude.md) | 5 | sonnet | sonnet | T23 | — | todo |
+| T38 | [Quoted reminder phrases](T38-quoted-reminders.md) | 5 | haiku | sonnet | T23 | P5 | todo |
+| T37 | [Claude Code provider](T37-claude-code-provider.md) | 5 | sonnet | sonnet | T23 | P5 | todo |
+| T24 | [Ask Claude](T24-ask-claude.md) | 5 | sonnet | sonnet | T37 | — | todo |
 | T25 | [App icon](T25-app-icon.md) | 5 | haiku | sonnet | T23 | — | todo |
-| T26 | [Final pass](T26-final-pass.md) | 5 | sonnet | opus | T24, T25 | — | todo |
+| T26 | [Final pass](T26-final-pass.md) | 5 | sonnet | opus | T24, T25, T38 | — | todo |
