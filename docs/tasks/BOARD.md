@@ -31,7 +31,7 @@ with the same `Parallel` group run together. Phases 4–5 are outlines until `/p
 | T18 | [Settings window](T18-settings-window.md) | 3 | sonnet | sonnet | T16 | — | done |
 | T17 | [Chat popover](T17-chat-popover.md) | 3 | sonnet | sonnet | T15, T32, T18 | — | done |
 | T33 | [Clipboard buttons, Chat menu item, reopen](T33-chat-clipboard-and-menu.md) | 3 | sonnet | sonnet | T17 | — | done |
-| T19 | [Check: chat memory](T19-chat-budget.md) | 3 | haiku | sonnet | T33 | — | todo |
+| T19 | [Check: chat memory](T19-chat-budget.md) | 3 | haiku | sonnet | T33 | — | blocked: 38 MB idle after chat closed (limit 35) |
 | T20 | [Reminder phrase parser](T20-reminder-parser.md) | 4 | sonnet | sonnet | T19 | — | todo |
 | T21 | [Reminders store](T21-reminders-store.md) | 4 | sonnet | sonnet | T19 | — | todo |
 | T22 | [Reminders from chat](T22-chat-reminders.md) | 4 | sonnet | sonnet | T20, T21 | — | todo |
