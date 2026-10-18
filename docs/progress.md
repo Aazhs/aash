@@ -24,3 +24,4 @@ needed help, so card models can be tuned.
 | 2026-10-18 | T29 Bigger buddy, solid outline | sonnet | 2 review, 1 manual | Manual: user wanted no outline at all, so `.dark` has none (card asked for solid #ede6f2); outline pass kept and tested, unused. Stale: menubar.md:108 says 15 pt Retina. |
 | 2026-10-18 | T30 Free walk after window change | sonnet | 0 | Passed review first time. Manual OK: app switch narrowed visible to -481, buddy kept walking and rested at the new edge (log confirmed). |
 | 2026-10-18 | T14 Record Gemini responses | haiku | 0 | Passed review first time. Step-array two-turn shape accepted; bad key is HTTP 400 with the message at `[0].error.message`. Corrected the `output_text` bullet in ai.md. |
+| 2026-10-19 | T31 Chat types and SSE parser | sonnet | 0 | Passed review first time. 71 tests, 0 warnings. |
