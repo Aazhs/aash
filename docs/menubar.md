@@ -92,4 +92,37 @@ macOS update to see what changed. It's a script, not part of the build.
 
 ## Accessibility findings
 
-T10 fills this in with what the Accessibility scan returns on this Mac.
+Report from this Mac (macOS 27.0.1, one screen, 1440 × 900, Ghostty frontmost):
+
+```
+date: 2026-10-18T15:36:07Z
+macOS: Version 27.0.1 (Build 26A434)
+trusted: true
+screen 0: frame (0.0, 0.0, 1440.0, 900.0) visibleFrame (0.0, 0.0, 1440.0, 870.0)
+own item: (1011.0, 870.0, 38.0, 30.0)
+appMenus:
+  Ghostty · 10 … 44
+  Ghostty · 43 … 115
+  Ghostty · 114 … 157
+  Ghostty · 156 … 200
+  Ghostty · 199 … 249
+  Ghostty · 248 … 317
+  Ghostty · 316 … 365
+extras:
+  Aash · 1018 … 1042
+  NepTunes · 1048 … 1088
+  WeatherMenu · 1086 … 1158
+  MenuBarAgent · 1166 … 1188
+  MenuBarAgent · 1204 … 1230
+  MenuBarAgent · 1246 … 1272
+  MenuBarAgent · 1288 … 1420
+agentItems: 21 entries (MenuBarAgent · 0 … 1440, then each extras item 2-3 times)
+counts: appMenus 7, extras 7, agentItems 21
+```
+
+- `extras` found every other status item, with usable frames. Some are owned by "MenuBarAgent"
+  instead of the real app, but the frames are right. Our own icon (1018 … 1042) sits inside our
+  window (1011 … 1049).
+- `agentItems` only repeats `extras` (plus one full-width bar), so it adds nothing. `extras` is enough.
+- `appMenus` gave sensible frames: the frontmost app's menus end at x = 365. The free space for
+  walking is between that and the leftmost status item.

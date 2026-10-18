@@ -14,9 +14,11 @@ final class AppMenu: NSObject, NSMenuDelegate {
     private let isWalking: () -> Bool
     private let onWalkNow: () -> Void
     private let onWalkingChanged: (Bool) -> Void
+    private let ownItemFrame: () -> CGRect?
 
     init(settings: AppSettings, isWalking: @escaping () -> Bool,
-         onWalkNow: @escaping () -> Void, onWalkingChanged: @escaping (Bool) -> Void) {
+         onWalkNow: @escaping () -> Void, onWalkingChanged: @escaping (Bool) -> Void,
+         ownItemFrame: @escaping () -> CGRect?) {
         let menu = NSMenu()
         menu.autoenablesItems = false
         let walkNowItem = NSMenuItem(title: "Walk now", action: #selector(walkNow(_:)), keyEquivalent: "")
@@ -29,6 +31,10 @@ final class AppMenu: NSObject, NSMenuDelegate {
         menu.addItem(loginItem)
         menu.addItem(.separator())
         menu.addItem(aboutItem)
+        let reportItem = NSMenuItem(title: "Copy Menu Bar Report", action: #selector(copyReport(_:)), keyEquivalent: "")
+        reportItem.isAlternate = true
+        reportItem.keyEquivalentModifierMask = [.option]
+        menu.addItem(reportItem)
         menu.addItem(NSMenuItem(title: "Quit Aash", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         self.menu = menu
         self.loginItem = loginItem
@@ -38,11 +44,13 @@ final class AppMenu: NSObject, NSMenuDelegate {
         self.isWalking = isWalking
         self.onWalkNow = onWalkNow
         self.onWalkingChanged = onWalkingChanged
+        self.ownItemFrame = ownItemFrame
         super.init()
         walkNowItem.target = self
         walkingItem.target = self
         loginItem.target = self
         aboutItem.target = self
+        reportItem.target = self
         menu.delegate = self
     }
 
@@ -72,5 +80,17 @@ final class AppMenu: NSObject, NSMenuDelegate {
     @objc private func about(_ sender: NSMenuItem) {
         NSApp.activate()   // an accessory app must activate, or the panel opens behind other windows
         NSApp.orderFrontStandardAboutPanel(nil)
+    }
+
+    @objc private func copyReport(_ sender: NSMenuItem) {
+        let text: String
+        if MenuBarScanner.isTrusted {
+            text = MenuBarScanner.report(MenuBarScanner.scan(), ownItem: ownItemFrame())
+        } else {
+            MenuBarScanner.requestTrust()
+            text = "Accessibility isn't allowed yet."
+        }
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(text, forType: .string)
     }
 }

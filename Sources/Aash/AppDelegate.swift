@@ -24,7 +24,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let menu = AppMenu(settings: settings,
                            isWalking: { [weak controller] in controller?.isWalking ?? false },
                            onWalkNow: { [weak controller] in controller?.handle(.walkNow) },
-                           onWalkingChanged: { [weak controller] on in controller?.handle(.walkingEnabled(on)) })
+                           onWalkingChanged: { [weak controller] on in controller?.handle(.walkingEnabled(on)) },
+                           ownItemFrame: { [weak item] in item?.window?.frame })
         item.menu = menu.menu
         appMenu = menu
 
