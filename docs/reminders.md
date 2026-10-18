@@ -1,6 +1,6 @@
 # Reminders
 
-Tasks live in Apple's Reminders app, not in a database of ours. They sync to the iPhone, they
+Tasks live in Apple's Reminders app, not in a database of ours. They alert on the Mac (the user's phone is Android, so there's no phone sync), they
 alert through the system, and the buddy only adds, reads and waves.
 
 ## Flow
@@ -14,7 +14,7 @@ ReminderPhraseParser (AashCore, T35) ── trigger but no date ──> Gemini j
         ▼
 RemindersService.add (EventKit, T21): due date + an alarm at the due time
         │
-        ├─> Reminders shows the alert at the due time, on the Mac and the iPhone
+        ├─> Reminders shows the alert at the due time, on the Mac
         │
         └─> EKEventStoreChanged ──> ReminderScheduler (T23) ──> buddy.handle(.reminderAt(next due))
                                                                engine waves 5 s before

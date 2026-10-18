@@ -17,7 +17,7 @@ Source: the research doc "Menu bar buddy: research" (17 Oct 2026), with the chan
 | **Sleeps** | From 23:00 to 07:00 it sits with its eyes closed and doesn't move. |
 | **Pauses** | Screen asleep, Mac locked, Low Power Mode on, or menu bar hidden: everything stops. |
 | **Chats** | Left-click opens a small popover. Ask a question, or use one-click actions on the clipboard: summarise, rewrite, explain. Replies stream in. Gemini answers; it needs your free API key. |
-| **Reminders** | Type "remind me to submit the lab report at 6" in the chat. It becomes a real Apple Reminders item with an alert, so it reaches your iPhone too. A few seconds before it's due, the buddy waves. Each morning the menu shows how many reminders are due today. |
+| **Reminders** | Type "remind me to submit the lab report at 6" in the chat. It becomes a real Apple Reminders item with an alert on the Mac. (The user's phone is Android, so there's no phone sync.) A few seconds before it's due, the buddy waves. Each morning the menu shows how many reminders are due today. |
 | **Ask Claude** (Phase 5) | An optional button that sends a hard question to Claude through the Claude Code CLI you already have. |
 | **Menu** | Right-click: Chat, Walk now, Walking on/off, Open at login, Settings…, Quit. |
 | **Settings** | Gemini API key, model, walking on/off, free walk (Accessibility), open at login. |

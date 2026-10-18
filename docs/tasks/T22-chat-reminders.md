@@ -163,7 +163,7 @@ what it says?"
    Reminders access with "Aash adds the reminders you type in its chat and waves when one is
    due." Allow it. The dialog may close the popover. The reminder is still added, but without the
    "Added" line. Either way, the item is in the Reminders app. Open the chat again. At that time the Reminders alert
-   appears, and on the iPhone too if iCloud Reminders is on.
+   appears on the Mac.
 2. `remind me to call the bank tomorrow at 9am` → `Added: Call the bank · tomorrow 9:00 AM` with an
    Undo button, and the buddy raises its arms.
 3. `reminder: dentist on Friday` → `Added: Dentist · Fri <date> 9:00 AM`. Click Undo: the chat
