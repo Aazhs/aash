@@ -37,3 +37,4 @@ needed help, so card models can be tuned.
 | 2026-10-19 | T20 Reminder date detector | sonnet | 0 | Passed review first time. 23-row table + 4 no-match texts. Reviewer note: loop continues past an unusable first hit; card says fall through to patterns (harmless). |
 | 2026-10-19 | T36 Reminder fallback and wording | sonnet | 0 | Passed review first time. 8 fallback tests, 4 wording tests. |
 | 2026-10-19 | T35 Reminder phrase parser | sonnet | 0 | Passed review first time. Test helper named `on` (clash with global `at`), calendar `phraseIST`. |
+| 2026-10-19 | T21 Reminders store | sonnet | 0 | Passed review first time. Observer token never removed (service lives for whole run); revisit if T22 recreates it. |

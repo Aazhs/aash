@@ -26,6 +26,8 @@
 	<string>14.0</string>
 	<key>LSUIElement</key>
 	<true/>
+	<key>NSRemindersFullAccessUsageDescription</key>
+	<string>Aash adds the reminders you type in its chat and waves when one is due.</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>
