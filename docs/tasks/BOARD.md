@@ -19,7 +19,7 @@ with the same `Parallel` group run together. Phases 3–5 are outlines until `/p
 | T11 | [Free-space maths](T11-free-space.md) | 2 | sonnet | sonnet | T10 | — | done |
 | T12 | [Free walk](T12-free-walk.md) | 2 | opus | opus | T11 | — | done |
 | T27 | [Respect Reduce Motion](T27-reduce-motion.md) | 2 | sonnet | sonnet | T12 | — | done |
-| T13 | [Check: walking budget](T13-walking-budget.md) | 2 | haiku | sonnet | T27 | — | todo |
+| T13 | [Check: walking budget](T13-walking-budget.md) | 2 | haiku | sonnet | T27 | — | done |
 | T14 | [Record Gemini responses](T14-gemini-fixtures.md) | 3 | haiku | sonnet | T13 | — | todo |
 | T15 | [Gemini client](T15-gemini-client.md) | 3 | sonnet | sonnet | T14 | — | todo |
 | T16 | [Keychain store](T16-keychain.md) | 3 | haiku | sonnet | T13 | — | todo |
