@@ -8,6 +8,7 @@ import AashCore
 final class ChatPopoverController: NSObject, NSPopoverDelegate {
     private let anchor: () -> NSView?
     private let settings: AppSettings
+    private let reminders: RemindersService
     private let keychain: KeychainStore
     private let openSettings: () -> Void
     private let onEvent: (BuddyEvent) -> Void
@@ -16,12 +17,13 @@ final class ChatPopoverController: NSObject, NSPopoverDelegate {
 
     /// `anchor` returns the view the popover points at. `openSettings` is what the "Open Settings"
     /// button does. `onEvent` receives `.chatOpened`, `.chatClosed` and `.replyArrived`.
-    init(anchor: @escaping () -> NSView?, settings: AppSettings,
+    init(anchor: @escaping () -> NSView?, settings: AppSettings, reminders: RemindersService,
          keychain: KeychainStore = KeychainStore(),
          openSettings: @escaping () -> Void,
          onEvent: @escaping (BuddyEvent) -> Void) {
         self.anchor = anchor
         self.settings = settings
+        self.reminders = reminders
         self.keychain = keychain
         self.openSettings = openSettings
         self.onEvent = onEvent
@@ -42,8 +44,9 @@ final class ChatPopoverController: NSObject, NSPopoverDelegate {
         let stored = (try? keychain.read(SettingsWindowController.keyAccount)) ?? nil
         let key = (stored?.isEmpty ?? true) ? nil : stored
         let provider = GeminiProvider(apiKey: key, model: settings.chatModel)
+        let intent = ReminderIntent(reminders: reminders, provider: provider)
         let viewController = ChatViewController(
-            provider: provider, hasKey: key != nil,
+            provider: provider, reminders: intent, hasKey: key != nil,
             openSettings: { [weak self] in
                 self?.close()
                 self?.openSettings()

@@ -10,6 +10,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var stage: FreeWalkStage?
     private var settingsWindow: SettingsWindowController?
     private var chat: ChatPopoverController?
+    private var reminders: RemindersService?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let item = StatusItemController()
@@ -26,8 +27,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let controller = BuddyController(statusItem: item, stage: stage)
         controller.start(walkingEnabled: effectiveWalking())
         buddy = controller
+        let reminders = RemindersService()
+        self.reminders = reminders
         chat = ChatPopoverController(
-            anchor: { [weak item] in item?.button }, settings: settings,
+            anchor: { [weak item] in item?.button }, settings: settings, reminders: reminders,
             openSettings: { [weak self] in self?.openSettings() },
             onEvent: { [weak controller] in controller?.handle($0) })
         // After `start`, which also sets onLeftClick.
