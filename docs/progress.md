@@ -36,3 +36,4 @@ needed help, so card models can be tuned.
 | 2026-10-19 | T19 Check: chat memory | haiku | 0 | Re-run after T34. idle 60s 0.01% 12.0 MB; chat 15s 3.35% 37.0 MB; idle 20s after close (WARMUP=30) 0.00% 33.0 MB: script FAIL vs 30 MB, within card 35 MB. Manual OK. Re-measure after T22 (2 MB headroom). |
 | 2026-10-19 | T20 Reminder date detector | sonnet | 0 | Passed review first time. 23-row table + 4 no-match texts. Reviewer note: loop continues past an unusable first hit; card says fall through to patterns (harmless). |
 | 2026-10-19 | T36 Reminder fallback and wording | sonnet | 0 | Passed review first time. 8 fallback tests, 4 wording tests. |
+| 2026-10-19 | T35 Reminder phrase parser | sonnet | 0 | Passed review first time. Test helper named `on` (clash with global `at`), calendar `phraseIST`. |
