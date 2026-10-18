@@ -11,30 +11,52 @@ final class BuddyController {
     private(set) var output: BuddyOutput
     private var engine: BehaviourEngine
     private let statusItem: StatusItemController
+    private let stage: WalkStage
     private let clock: AnimationClock
+    private var walking = false
+    private var prepareTask: Task<Void, Never>?
     private var lastActivity: Activity
 
-    init(statusItem: StatusItemController, clock: AnimationClock = AnimationClock(), now: Date = Date()) {
+    init(statusItem: StatusItemController, stage: WalkStage, clock: AnimationClock = AnimationClock(), now: Date = Date()) {
         self.statusItem = statusItem
+        self.stage = stage
         self.clock = clock
         engine = BehaviourEngine(seed: UInt64.random(in: .min ... .max), now: now)
         output = engine.output
         lastActivity = engine.activity
     }
 
-    /// Connects the clock and clicks, then shows the first output.
-    func start() {
+    /// Connects the clock and clicks, sends the walking setting, and shows the first output.
+    func start(walkingEnabled: Bool) {
         clock.onTick = { [weak self] in self?.handle(.tick) }
         statusItem.onLeftClick = { [weak self] in self?.handle(.clicked) }
-        // T08 turns walking on
-        handle(.walkingEnabled(false))
+        handle(.walkingEnabled(walkingEnabled))
     }
 
     /// Feeds one event to the engine and applies the result.
     func handle(_ event: BuddyEvent) {
         output = engine.handle(event, now: Date())
-        statusItem.spriteView.show(SpriteFrame(output.pose), facingLeft: output.facingLeft,
-                                   x: statusItem.spriteX(offset: output.offset))
+        if output.needsWalkArea && !walking {
+            walking = true
+            prepareTask = Task { @MainActor [weak self] in
+                guard let self else { return }
+                guard self.walking, !Task.isCancelled else { return }
+                let area = await self.stage.prepare()
+                guard self.walking, !Task.isCancelled else { return }
+                self.handle(.walkArea(area))
+            }
+        }
+        if walking && !output.needsWalkArea && output.offset == 0 {
+            walking = false
+            prepareTask?.cancel()
+            stage.finish()
+        }
+        if walking {
+            stage.show(output)
+        } else {
+            statusItem.spriteView.show(SpriteFrame(output.pose), facingLeft: output.facingLeft,
+                                       x: statusItem.spriteX(offset: output.offset))
+        }
         clock.apply(output.schedule)
         if engine.activity != lastActivity {
             lastActivity = engine.activity

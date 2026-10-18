@@ -13,7 +13,7 @@ with the same `Parallel` group run together. Phases 3–5 are outlines until `/p
 | T05 | [Pause when nobody's looking](T05-pause.md) | 1 | sonnet | sonnet | T04 | — | done |
 | T06 | [Menu and open at login](T06-menu-and-login.md) | 1 | haiku | sonnet | T04 | — | done |
 | T07 | [Check: idle budget](T07-idle-budget.md) | 1 | haiku | sonnet | T05, T06 | — | done |
-| T08 | [Stretch walk](T08-stretch-walk.md) | 2 | sonnet | sonnet | T07 | — | todo |
+| T08 | [Stretch walk](T08-stretch-walk.md) | 2 | sonnet | sonnet | T07 | — | done |
 | T09 | [Walk safety](T09-walk-safety.md) | 2 | sonnet | sonnet | T08 | — | todo |
 | T10 | [Accessibility probe](T10-accessibility-probe.md) | 2 | sonnet | sonnet | T09 | — | todo |
 | T11 | [Free-space maths](T11-free-space.md) | 2 | sonnet | sonnet | T10 | — | todo |

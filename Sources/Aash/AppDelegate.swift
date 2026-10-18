@@ -6,17 +6,26 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var buddy: BuddyController?
     private var systemEvents: SystemEvents?
     private var appMenu: AppMenu?
+    private var settings: AppSettings?
+    private var stage: StretchStage?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let item = StatusItemController()
-        let menu = AppMenu()
+        statusItem = item
+        let settings = AppSettings()
+        self.settings = settings
+        let stage = StretchStage(statusItem: item, distance: { [weak settings] in settings?.walkDistance ?? 120 })
+        self.stage = stage
+
+        let controller = BuddyController(statusItem: item, stage: stage)
+        controller.start(walkingEnabled: settings.walkingEnabled)
+        buddy = controller
+
+        let menu = AppMenu(settings: settings,
+                           onWalkNow: { [weak controller] in controller?.handle(.walkNow) },
+                           onWalkingChanged: { [weak controller] on in controller?.handle(.walkingEnabled(on)) })
         item.menu = menu.menu
         appMenu = menu
-        statusItem = item
-
-        let controller = BuddyController(statusItem: item)
-        controller.start()
-        buddy = controller
 
         let events = SystemEvents(statusWindow: { [weak item] in item?.window })
         events.onPausedChange = { [weak controller] paused in controller?.handle(.paused(paused)) }
