@@ -82,7 +82,42 @@ Rules for free walk:
   sizes): fall back to stretch walk for that walk, and log why.
 - Re-scan when the frontmost app changes (`NSWorkspace.didActivateApplicationNotification`) and
   when screens change (`NSApplication.didChangeScreenParametersNotification`). Never scan on a timer.
-- Avoid the notch: subtract `auxiliaryTopLeftArea` and `auxiliaryTopRightArea` when they aren't nil.
+- No notch handling. Aash runs only on a MacBook Air M1, which has no notch, so `FreeWalkStage`
+  passes no `blocked` ranges. `MenuBarLayout.blocked` stays in `AashCore` (T11) and is ready if
+  that ever changes.
+
+### Walk window settings (T12)
+
+`WalkWindow` is an `NSPanel` with these settings:
+
+| Setting | Value | Why |
+|---|---|---|
+| `styleMask` | `[.borderless, .nonactivatingPanel]` | a click doesn't activate Aash or take focus |
+| `level` | `.statusBar + 1` (26) | the bar is 24 and status items are 25; open menus (101) still cover it |
+| `collectionBehavior` | `[.canJoinAllSpaces, .stationary, .fullScreenAuxiliary, .ignoresCycle]` | on every Space and next to full-screen apps; not in Exposé or the window cycle |
+| `hidesOnDeactivate` | `false` | `NSPanel` defaults to `true`, and Aash, an accessory app, is rarely the active app. Not tried with the default |
+| `canBecomeKey` / `canBecomeMain` | `false` (private subclass) | never key |
+| `isOpaque`, `backgroundColor`, `hasShadow` | `false`, `.clear`, `false` | only the sprite shows |
+| `ignoresMouseEvents` | `false` | clear pixels in the sprite's cell still take the click |
+| Size and place | sprite width (15 pt Retina / 16 pt) × bar height (`frame.maxY − visibleFrame.maxY`, or `NSStatusBar.system.thickness` when that's 0); x rounded to device pixels | |
+| Showing it | `orderFrontRegardless()`, never `makeKeyAndOrderFront` | |
+
+The content view is a small view that takes `mouseUp`, with `acceptsFirstMouse` set to true.
+`SpriteLayerView` passes hits through to it. The panel exists only during a free walk and is
+released in `finish()`.
+
+Checked on 18 Oct 2026 (macOS 27.0.1): a test panel at x = 600 drew above the bar, centred
+vertically, and didn't cover the app menus (screenshot). Still to check by hand: clicks, full-screen
+Spaces, and entering full screen mid-walk. `FreeWalkStage` rescans on
+`NSWorkspace.activeSpaceDidChangeNotification`, and a scan with no bar gives a nil plan, which hides
+the buddy until it's home. If the panel still misbehaves in full screen, drop `.fullScreenAuxiliary`
+and record why here.
+
+The walk window's `appearance` is set to the status button's `effectiveAppearance` (at
+`prepare()` and on every rescan), so it uses the same light or dark sheet (`sprites.md`).
+
+While the buddy is out, the status item's sprite is hidden (`spriteView.isHidden`). No "out"
+marker is drawn.
 
 ## Probe tool
 

@@ -18,4 +18,10 @@ final class AppSettings {
         get { min(max(defaults.object(forKey: "walkDistance") as? Double ?? 120, 24), 240) }
         set { defaults.set(min(max(newValue, 24), 240), forKey: "walkDistance") }
     }
+
+    /// Whether walks may leave the icon and use the free part of the bar. Default false.
+    var freeWalkEnabled: Bool {
+        get { defaults.object(forKey: "freeWalkEnabled") as? Bool ?? false }
+        set { defaults.set(newValue, forKey: "freeWalkEnabled") }
+    }
 }

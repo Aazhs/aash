@@ -10,6 +10,7 @@ final class AppMenu: NSObject, NSMenuDelegate {
     private let loginItem: NSMenuItem
     private let walkNowItem: NSMenuItem
     private let walkingItem: NSMenuItem
+    private let freeWalkItem: NSMenuItem
     private let settings: AppSettings
     private let isWalking: () -> Bool
     private let onWalkNow: () -> Void
@@ -23,10 +24,13 @@ final class AppMenu: NSObject, NSMenuDelegate {
         menu.autoenablesItems = false
         let walkNowItem = NSMenuItem(title: "Walk now", action: #selector(walkNow(_:)), keyEquivalent: "")
         let walkingItem = NSMenuItem(title: "Walking", action: #selector(toggleWalking(_:)), keyEquivalent: "")
+        let freeWalkItem = NSMenuItem(title: "Walk on the Whole Bar", action: #selector(toggleFreeWalk(_:)), keyEquivalent: "")
+        freeWalkItem.indentationLevel = 1
         let loginItem = NSMenuItem(title: "Open at Login", action: #selector(toggleLogin(_:)), keyEquivalent: "")
         let aboutItem = NSMenuItem(title: "About Aash", action: #selector(about(_:)), keyEquivalent: "")
         menu.addItem(walkNowItem)
         menu.addItem(walkingItem)
+        menu.addItem(freeWalkItem)
         menu.addItem(.separator())
         menu.addItem(loginItem)
         menu.addItem(.separator())
@@ -40,6 +44,7 @@ final class AppMenu: NSObject, NSMenuDelegate {
         self.loginItem = loginItem
         self.walkNowItem = walkNowItem
         self.walkingItem = walkingItem
+        self.freeWalkItem = freeWalkItem
         self.settings = settings
         self.isWalking = isWalking
         self.onWalkNow = onWalkNow
@@ -48,6 +53,7 @@ final class AppMenu: NSObject, NSMenuDelegate {
         super.init()
         walkNowItem.target = self
         walkingItem.target = self
+        freeWalkItem.target = self
         loginItem.target = self
         aboutItem.target = self
         reportItem.target = self
@@ -58,6 +64,8 @@ final class AppMenu: NSObject, NSMenuDelegate {
         loginItem.state = LoginItem.isEnabled ? .on : .off
         walkNowItem.isEnabled = settings.walkingEnabled && !isWalking()
         walkingItem.state = settings.walkingEnabled ? .on : .off
+        freeWalkItem.state = settings.freeWalkEnabled ? .on : .off
+        freeWalkItem.isEnabled = settings.walkingEnabled
     }
 
     @objc private func walkNow(_ sender: NSMenuItem) {
@@ -67,6 +75,12 @@ final class AppMenu: NSObject, NSMenuDelegate {
     @objc private func toggleWalking(_ sender: NSMenuItem) {
         settings.walkingEnabled.toggle()
         onWalkingChanged(settings.walkingEnabled)
+    }
+
+    @objc private func toggleFreeWalk(_ sender: NSMenuItem) {
+        settings.freeWalkEnabled.toggle()
+        // Takes effect from the next walk; without permission each walk falls back to stretching.
+        if settings.freeWalkEnabled && !MenuBarScanner.isTrusted { MenuBarScanner.requestTrust() }
     }
 
     @objc private func toggleLogin(_ sender: NSMenuItem) {
