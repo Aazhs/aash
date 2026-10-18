@@ -14,3 +14,4 @@ needed help, so card models can be tuned.
 | 2026-10-18 | T06 Menu and open at login | haiku | 0 | Passed review first time; menu and login item confirmed by user. |
 | 2026-10-18 | T07 Check: idle budget | haiku | 0 | Passed review first time; idle 0.05% CPU, 12.0 MB; asleep 0.01% CPU, 0 wake-ups. |
 | 2026-10-18 | T08 Stretch walk | sonnet → opus | 3 review, 2 manual | Walk works; macOS slides the item ~0.3 s on resize, so the buddy appears to snap at start and end. Accepted by user; docs/menubar.md says home stays put, which is untrue on macOS 27. Fix later. |
+| 2026-10-18 | T09 Walk safety | sonnet | 0 | Passed review first time. Manual check: after lock/unlock the buddy returns home but the user reports the animation stopped; unconfirmed (no Aash log lines, idle-lock not verified). Suspect SystemEvents resume path (T05); check in T13. |

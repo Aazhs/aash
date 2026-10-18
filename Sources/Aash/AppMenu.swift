@@ -11,10 +11,12 @@ final class AppMenu: NSObject, NSMenuDelegate {
     private let walkNowItem: NSMenuItem
     private let walkingItem: NSMenuItem
     private let settings: AppSettings
+    private let isWalking: () -> Bool
     private let onWalkNow: () -> Void
     private let onWalkingChanged: (Bool) -> Void
 
-    init(settings: AppSettings, onWalkNow: @escaping () -> Void, onWalkingChanged: @escaping (Bool) -> Void) {
+    init(settings: AppSettings, isWalking: @escaping () -> Bool,
+         onWalkNow: @escaping () -> Void, onWalkingChanged: @escaping (Bool) -> Void) {
         let menu = NSMenu()
         menu.autoenablesItems = false
         let walkNowItem = NSMenuItem(title: "Walk now", action: #selector(walkNow(_:)), keyEquivalent: "")
@@ -33,6 +35,7 @@ final class AppMenu: NSObject, NSMenuDelegate {
         self.walkNowItem = walkNowItem
         self.walkingItem = walkingItem
         self.settings = settings
+        self.isWalking = isWalking
         self.onWalkNow = onWalkNow
         self.onWalkingChanged = onWalkingChanged
         super.init()
@@ -45,7 +48,7 @@ final class AppMenu: NSObject, NSMenuDelegate {
 
     func menuNeedsUpdate(_ menu: NSMenu) {
         loginItem.state = LoginItem.isEnabled ? .on : .off
-        walkNowItem.isEnabled = settings.walkingEnabled
+        walkNowItem.isEnabled = settings.walkingEnabled && !isWalking()
         walkingItem.state = settings.walkingEnabled ? .on : .off
     }
 

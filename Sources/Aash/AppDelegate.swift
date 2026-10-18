@@ -22,6 +22,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         buddy = controller
 
         let menu = AppMenu(settings: settings,
+                           isWalking: { [weak controller] in controller?.isWalking ?? false },
                            onWalkNow: { [weak controller] in controller?.handle(.walkNow) },
                            onWalkingChanged: { [weak controller] on in controller?.handle(.walkingEnabled(on)) })
         item.menu = menu.menu

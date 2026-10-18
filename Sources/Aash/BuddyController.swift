@@ -14,6 +14,8 @@ final class BuddyController {
     private let stage: WalkStage
     private let clock: AnimationClock
     private var walking = false
+    /// True from asking a stage for room until the walk is over.
+    var isWalking: Bool { walking }
     private var prepareTask: Task<Void, Never>?
     private var lastActivity: Activity
 
@@ -24,6 +26,7 @@ final class BuddyController {
         engine = BehaviourEngine(seed: UInt64.random(in: .min ... .max), now: now)
         output = engine.output
         lastActivity = engine.activity
+        stage.onRoomChanged = { [weak self] area in self?.handle(.walkArea(area)) }
     }
 
     /// Connects the clock and clicks, sends the walking setting, and shows the first output.
