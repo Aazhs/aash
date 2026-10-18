@@ -61,7 +61,18 @@ final class ChatViewController: NSViewController {
         input.action = #selector(send(_:))
         input.bezelStyle = .roundedBezel
 
-        let stack = NSStackView(views: [scroll, settingsButton, input])
+        let buttons = ChatPrompts.ClipboardAction.allCases.enumerated().map { index, action in
+            let button = NSButton(title: action.title, target: self, action: #selector(clipboardClicked(_:)))
+            button.bezelStyle = .rounded
+            button.tag = index
+            return button
+        }
+        let row = NSStackView(views: buttons)
+        row.orientation = .horizontal
+        row.spacing = 6
+        row.distribution = .fillEqually
+
+        let stack = NSStackView(views: [scroll, settingsButton, row, input])
         stack.orientation = .vertical
         stack.alignment = .width
         stack.spacing = 8
@@ -102,9 +113,33 @@ final class ChatViewController: NSViewController {
         let text = input.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty, !streaming else { return }
         input.stringValue = ""
+        submit(text, display: text)
+    }
+
+    /// Sends the clipboard text with this action's instruction, as one user message.
+    func runClipboardAction(_ action: ChatPrompts.ClipboardAction) {
+        guard !streaming else { return }
+        let clip = NSPasteboard.general.string(forType: .string) ?? ""
+        if clip.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            appendText("Nothing to work on: copy some text first.", color: .secondaryLabelColor, separate: true)
+            textView.scrollToEndOfDocument(nil)
+            return
+        }
+        let shown = String(clip.prefix(60)).replacingOccurrences(of: "\n", with: " ")
+        let ellipsis = clip.count > 60 ? "…" : ""
+        submit(ChatPrompts.clipboardMessage(action, text: clip), display: "\(action.title): \(shown)\(ellipsis)")
+    }
+
+    @objc private func clipboardClicked(_ sender: NSButton) {
+        let actions = ChatPrompts.ClipboardAction.allCases
+        guard actions.indices.contains(sender.tag) else { return }
+        runClipboardAction(actions[sender.tag])
+    }
+
+    private func submit(_ text: String, display: String) {
         history.append(ChatMessage(role: .user, text: text))
         history = Array(history.suffix(20))
-        appendText(text, color: .controlAccentColor, separate: true)
+        appendText(display, color: .controlAccentColor, separate: true)
         streaming = true
         reply = ""
         let provider = self.provider

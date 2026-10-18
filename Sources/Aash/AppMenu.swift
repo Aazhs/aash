@@ -13,6 +13,7 @@ final class AppMenu: NSObject, NSMenuDelegate {
     private let freeWalkItem: NSMenuItem
     private let settings: AppSettings
     private let isWalking: () -> Bool
+    private let onOpenChat: () -> Void
     private let onWalkNow: () -> Void
     private let onWalkingChanged: (Bool) -> Void
     private let onOpenSettings: () -> Void
@@ -20,12 +21,14 @@ final class AppMenu: NSObject, NSMenuDelegate {
     private let ownItemFrame: () -> CGRect?
 
     init(settings: AppSettings, isWalking: @escaping () -> Bool,
+         onOpenChat: @escaping () -> Void,
          onWalkNow: @escaping () -> Void, onWalkingChanged: @escaping (Bool) -> Void,
          onOpenSettings: @escaping () -> Void,
          reduceMotion: @escaping () -> Bool,
          ownItemFrame: @escaping () -> CGRect?) {
         let menu = NSMenu()
         menu.autoenablesItems = false
+        let chatItem = NSMenuItem(title: "Chat", action: #selector(openChat(_:)), keyEquivalent: "")
         let walkNowItem = NSMenuItem(title: "Walk now", action: #selector(walkNow(_:)), keyEquivalent: "")
         let walkingItem = NSMenuItem(title: "Walking", action: #selector(toggleWalking(_:)), keyEquivalent: "")
         let freeWalkItem = NSMenuItem(title: "Walk on the Whole Bar", action: #selector(toggleFreeWalk(_:)), keyEquivalent: "")
@@ -33,6 +36,8 @@ final class AppMenu: NSObject, NSMenuDelegate {
         let loginItem = NSMenuItem(title: "Open at Login", action: #selector(toggleLogin(_:)), keyEquivalent: "")
         let settingsItem = NSMenuItem(title: "Settings…", action: #selector(openSettings(_:)), keyEquivalent: ",")
         let aboutItem = NSMenuItem(title: "About Aash", action: #selector(about(_:)), keyEquivalent: "")
+        menu.addItem(chatItem)
+        menu.addItem(.separator())
         menu.addItem(walkNowItem)
         menu.addItem(walkingItem)
         menu.addItem(freeWalkItem)
@@ -53,12 +58,14 @@ final class AppMenu: NSObject, NSMenuDelegate {
         self.freeWalkItem = freeWalkItem
         self.settings = settings
         self.isWalking = isWalking
+        self.onOpenChat = onOpenChat
         self.onWalkNow = onWalkNow
         self.onWalkingChanged = onWalkingChanged
         self.onOpenSettings = onOpenSettings
         self.reduceMotion = reduceMotion
         self.ownItemFrame = ownItemFrame
         super.init()
+        chatItem.target = self
         walkNowItem.target = self
         walkingItem.target = self
         freeWalkItem.target = self
@@ -78,6 +85,10 @@ final class AppMenu: NSObject, NSMenuDelegate {
         walkingItem.state = settings.walkingEnabled ? .on : .off
         freeWalkItem.state = settings.freeWalkEnabled ? .on : .off
         freeWalkItem.isEnabled = settings.walkingEnabled && !still
+    }
+
+    @objc private func openChat(_ sender: NSMenuItem) {
+        onOpenChat()
     }
 
     @objc private func walkNow(_ sender: NSMenuItem) {

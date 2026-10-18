@@ -36,6 +36,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         let menu = AppMenu(settings: settings,
                            isWalking: { [weak controller] in controller?.isWalking ?? false },
+                           onOpenChat: { [weak self] in self?.chat?.show() },
                            onWalkNow: { [weak controller] in controller?.handle(.walkNow) },
                            onWalkingChanged: { [weak self] _ in self?.sendWalking() },
                            onOpenSettings: { [weak self] in self?.openSettings() },
@@ -73,6 +74,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func sendWalking() {
         buddy?.handle(.walkingEnabled(effectiveWalking()))
+    }
+
+    /// An accessory app shows nothing when launched a second time, so open the chat instead.
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        chat?.show()
+        return false
     }
 
     func applicationWillTerminate(_ notification: Notification) {
