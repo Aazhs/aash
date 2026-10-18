@@ -28,7 +28,7 @@ with the same `Parallel` group run together. Phases 4–5 are outlines until `/p
 | T15 | [Gemini client](T15-gemini-client.md) | 3 | sonnet | sonnet | T14, T31 | — | done |
 | T32 | [Chat wording](T32-chat-wording.md) | 3 | haiku | sonnet | T31 | — | done |
 | T16 | [Keychain store](T16-keychain.md) | 3 | haiku | sonnet | T13 | — | done |
-| T18 | [Settings window](T18-settings-window.md) | 3 | sonnet | sonnet | T16 | — | todo |
+| T18 | [Settings window](T18-settings-window.md) | 3 | sonnet | sonnet | T16 | — | done |
 | T17 | [Chat popover](T17-chat-popover.md) | 3 | sonnet | sonnet | T15, T32, T18 | — | todo |
 | T33 | [Clipboard buttons, Chat menu item, reopen](T33-chat-clipboard-and-menu.md) | 3 | sonnet | sonnet | T17 | — | todo |
 | T19 | [Check: chat memory](T19-chat-budget.md) | 3 | haiku | sonnet | T33 | — | todo |

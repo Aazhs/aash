@@ -15,11 +15,13 @@ final class AppMenu: NSObject, NSMenuDelegate {
     private let isWalking: () -> Bool
     private let onWalkNow: () -> Void
     private let onWalkingChanged: (Bool) -> Void
+    private let onOpenSettings: () -> Void
     private let reduceMotion: () -> Bool
     private let ownItemFrame: () -> CGRect?
 
     init(settings: AppSettings, isWalking: @escaping () -> Bool,
          onWalkNow: @escaping () -> Void, onWalkingChanged: @escaping (Bool) -> Void,
+         onOpenSettings: @escaping () -> Void,
          reduceMotion: @escaping () -> Bool,
          ownItemFrame: @escaping () -> CGRect?) {
         let menu = NSMenu()
@@ -29,12 +31,14 @@ final class AppMenu: NSObject, NSMenuDelegate {
         let freeWalkItem = NSMenuItem(title: "Walk on the Whole Bar", action: #selector(toggleFreeWalk(_:)), keyEquivalent: "")
         freeWalkItem.indentationLevel = 1
         let loginItem = NSMenuItem(title: "Open at Login", action: #selector(toggleLogin(_:)), keyEquivalent: "")
+        let settingsItem = NSMenuItem(title: "Settings…", action: #selector(openSettings(_:)), keyEquivalent: ",")
         let aboutItem = NSMenuItem(title: "About Aash", action: #selector(about(_:)), keyEquivalent: "")
         menu.addItem(walkNowItem)
         menu.addItem(walkingItem)
         menu.addItem(freeWalkItem)
         menu.addItem(.separator())
         menu.addItem(loginItem)
+        menu.addItem(settingsItem)
         menu.addItem(.separator())
         menu.addItem(aboutItem)
         let reportItem = NSMenuItem(title: "Copy Menu Bar Report", action: #selector(copyReport(_:)), keyEquivalent: "")
@@ -51,6 +55,7 @@ final class AppMenu: NSObject, NSMenuDelegate {
         self.isWalking = isWalking
         self.onWalkNow = onWalkNow
         self.onWalkingChanged = onWalkingChanged
+        self.onOpenSettings = onOpenSettings
         self.reduceMotion = reduceMotion
         self.ownItemFrame = ownItemFrame
         super.init()
@@ -58,6 +63,7 @@ final class AppMenu: NSObject, NSMenuDelegate {
         walkingItem.target = self
         freeWalkItem.target = self
         loginItem.target = self
+        settingsItem.target = self
         aboutItem.target = self
         reportItem.target = self
         menu.delegate = self
@@ -95,6 +101,10 @@ final class AppMenu: NSObject, NSMenuDelegate {
         } catch {
             log.error("Open at Login failed: \(error.localizedDescription, privacy: .public)")
         }
+    }
+
+    @objc private func openSettings(_ sender: NSMenuItem) {
+        onOpenSettings()
     }
 
     @objc private func about(_ sender: NSMenuItem) {

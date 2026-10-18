@@ -8,6 +8,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var appMenu: AppMenu?
     private var settings: AppSettings?
     private var stage: FreeWalkStage?
+    private var settingsWindow: SettingsWindowController?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let item = StatusItemController()
@@ -30,6 +31,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                            isWalking: { [weak controller] in controller?.isWalking ?? false },
                            onWalkNow: { [weak controller] in controller?.handle(.walkNow) },
                            onWalkingChanged: { [weak self] _ in self?.sendWalking() },
+                           onOpenSettings: { [weak self] in self?.openSettings() },
                            reduceMotion: { [weak events] in events?.reduceMotion ?? false },
                            ownItemFrame: { [weak item] in item?.window?.frame })
         item.menu = menu.menu
@@ -38,6 +40,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         events.onPausedChange = { [weak controller] paused in controller?.handle(.paused(paused)) }
         events.onReduceMotionChange = { [weak self] _ in self?.sendWalking() }
         events.start()
+    }
+
+    private func openSettings() {
+        guard let settings else { return }
+        if settingsWindow == nil {
+            settingsWindow = SettingsWindowController(
+                settings: settings,
+                reduceMotion: { [weak self] in self?.systemEvents?.reduceMotion ?? false },
+                onWalkingChanged: { [weak self] in self?.sendWalking() },
+                onClose: { [weak self] in self?.settingsWindow = nil })
+        }
+        settingsWindow?.show()
     }
 
     /// Reduce Motion overrides the walking setting without changing it.

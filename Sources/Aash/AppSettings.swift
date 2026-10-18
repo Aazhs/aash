@@ -24,4 +24,16 @@ final class AppSettings {
         get { defaults.object(forKey: "freeWalkEnabled") as? Bool ?? false }
         set { defaults.set(newValue, forKey: "freeWalkEnabled") }
     }
+
+    /// The Gemini model used for chat. Default "gemini-3.5-flash-lite"; an empty saved value reads as the default.
+    var chatModel: String {
+        get {
+            let saved = defaults.string(forKey: "chatModel")?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            return saved.isEmpty ? AppSettings.defaultChatModel : saved
+        }
+        set { defaults.set(newValue.trimmingCharacters(in: .whitespacesAndNewlines), forKey: "chatModel") }
+    }
+
+    /// The model used when none is saved.
+    static let defaultChatModel = "gemini-3.5-flash-lite"
 }
