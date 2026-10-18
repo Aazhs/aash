@@ -161,3 +161,6 @@ final class RemindersService {
   through your own store. `onChange` is also called directly after `add` and `remove`, so callers
   don't depend on that. A second refresh costs one fetch.
 - If `defaultCalendarForNewReminders()` is nil (no Reminders list exists), `save` throws. Let it.
+- Unconfirmed: right after access is first granted, a store made before the grant may not see
+  the lists yet. If T22's first add fails with "Couldn't add…" and a second try works, call
+  `store.reset()` after a successful `requestFullAccessToReminders()`. Don't add it in advance.

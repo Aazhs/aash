@@ -161,10 +161,11 @@ what it says?"
 
 1. Type `remind me to test Aash at <a time about 3 minutes from now, with am/pm>`. macOS asks for
    Reminders access with "Aash adds the reminders you type in its chat and waves when one is
-   due." Allow it. The chat shows `Added: Test Aash · today <that time>` with an Undo button, the
-   buddy raises its arms, and the item is in the Reminders app. At that time the Reminders alert
+   due." Allow it. The dialog may close the popover. The reminder is still added, but without the
+   "Added" line. Either way, the item is in the Reminders app. Open the chat again. At that time the Reminders alert
    appears, and on the iPhone too if iCloud Reminders is on.
-2. `remind me to call the bank tomorrow at 9am` → `Added: Call the bank · tomorrow 9:00 AM`.
+2. `remind me to call the bank tomorrow at 9am` → `Added: Call the bank · tomorrow 9:00 AM` with an
+   Undo button, and the buddy raises its arms.
 3. `reminder: dentist on Friday` → `Added: Dentist · Fri <date> 9:00 AM`. Click Undo: the chat
    shows `Removed: Dentist.` and the item is gone from Reminders.
 4. Only Gemini can read this one: `remind me to pay the bill on the 25th` →
@@ -188,6 +189,9 @@ to that. Report the number. A result over 35 MB is a problem to raise, not to fi
 
 ## Notes
 
+- The first add shows the system's permission dialog. Clicking it can close the `.transient`
+  popover, which cancels the task, so that first reminder gets no confirmation line. That's
+  accepted (`docs/decisions.md`, 19 Oct). Don't change the popover's behaviour for it.
 - If the popover closes while a reminder is being added, the task is cancelled, but EventKit may
   still save it: the reminder then exists with no confirmation shown. That's accepted.
 - Reminders need the signed build (`docs/WORKFLOW.md#signing`), otherwise macOS asks again after

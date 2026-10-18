@@ -96,7 +96,9 @@ public static let reminderUndoFailed = "Couldn't remove it. You can delete it in
    - both formatters set up as in step 3 (`en_US_POSIX`, `calendar`, `calendar.timeZone`)
    - result: `"Added: \(title) · \(day) \(time)"`. The middle dot is U+00B7 with a space on each side.
    `reminderRemoved`: `"Removed: \(title)."`
-6. The tests below. Then `./scripts/check.sh`.
+6. Write the tests below. Run `./scripts/check.sh --target AashAI` while working (this card runs in
+   parallel with T20); finish with it passing. The orchestrator runs the full check and the tests.
+   Don't touch `Sources/AashCore` even if the full build breaks there.
 
 ## Rules
 
@@ -107,7 +109,8 @@ public static let reminderUndoFailed = "Couldn't remove it. You can delete it in
 
 ## Done when
 
-- [ ] `./scripts/check.sh` prints `CHECK PASS`
+- [ ] `./scripts/check.sh --target AashAI` passes, and the orchestrator's full `./scripts/check.sh`
+  prints `CHECK PASS`
 - [ ] In `ReminderFallbackTests.swift` (IST calendar; `now` = 18 Oct 2026 10:00 IST):
   - `schemaRequiresIsReminder`: `JSONSerialization` of `schema` has `required == ["isReminder"]`
     and property keys `{isReminder, title, due}`

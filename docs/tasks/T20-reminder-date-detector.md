@@ -128,7 +128,9 @@ public enum ReminderDateDetector {
    month and day with `Calendar.current.dateComponents([.month, .day, .hour, .minute], from: date)`.
    Never use a calendar passed in from outside: in the tests that's IST, and on this Mac it happens
    to match, so the mistake would go unseen.
-9. The tests below. Then `./scripts/check.sh`.
+9. Write the tests below. Run `./scripts/check.sh --target AashCore` while working (this card runs
+   in parallel with T36); finish with it passing. The orchestrator runs the full check and the tests.
+   Don't touch `Sources/AashAI` even if the full build breaks there.
 
 ## Rules
 
@@ -141,7 +143,8 @@ public enum ReminderDateDetector {
 
 ## Done when
 
-- [ ] `./scripts/check.sh` prints `CHECK PASS`
+- [ ] `./scripts/check.sh --target AashCore` passes, and the orchestrator's full `./scripts/check.sh`
+  prints `CHECK PASS`
 - [ ] Tests in `ReminderDateDetectorTests.swift`. One parameterised `@Test` over this table, each
   row giving `(text, matched, day, time)`. It expects `String(text[match.range]) == matched`,
   `match.day == day` and `match.time == time`:

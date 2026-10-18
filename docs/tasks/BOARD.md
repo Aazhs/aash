@@ -34,7 +34,7 @@ with the same `Parallel` group run together. Phase 5 is an outline until `/plan-
 | T34 | [Give chat memory back after closing](T34-chat-memory-release.md) | 3 | sonnet | sonnet | T33 | — | done |
 | T19 | [Check: chat memory](T19-chat-budget.md) | 3 | haiku | sonnet | T33, T34 | — | done |
 | T20 | [Reminder date detector](T20-reminder-date-detector.md) | 4 | sonnet | sonnet | T19 | P4 | todo |
-| T36 | [Reminder fallback and wording](T36-reminder-fallback.md) | 4 | haiku | sonnet | T19 | P4 | todo |
+| T36 | [Reminder fallback and wording](T36-reminder-fallback.md) | 4 | sonnet | sonnet | T19 | P4 | todo |
 | T35 | [Reminder phrase parser](T35-reminder-parser.md) | 4 | sonnet | sonnet | T20 | — | todo |
 | T21 | [Reminders store](T21-reminders-store.md) | 4 | sonnet | sonnet | T35, T36 | — | todo |
 | T22 | [Reminders from chat](T22-chat-reminders.md) | 4 | sonnet | sonnet | T21 | — | todo |
