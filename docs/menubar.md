@@ -91,6 +91,7 @@ Rules for free walk:
   picks a target at random and a whole-range pick often turned around far from the menus' edge.
   The band is only used to pick the target at the start of a walk; re-scans report `visible`, so an
   app switch doesn't send the buddy home early.
+  If the new app's menus reach past the target, the buddy stops at their edge instead of turning back (T30).
 
 ### Walk window settings (T12)
 

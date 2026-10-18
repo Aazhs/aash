@@ -143,6 +143,45 @@ private func walking(_ area: ClosedRange<Double> = -24...0) -> BehaviourEngine {
         #expect(e.activity == .walkingHome)
     }
 
+    @Test func areaShrinkAheadMovesTarget() {
+        var e = walking(-120 ... -100)
+        e.handle(.walkArea(-50...0), now: at(10, 10, 1))
+        #expect(e.activity == .walkingOut)
+        var t = at(10, 10, 1)
+        var count = 0
+        while e.activity == .walkingOut, count < 1000 {
+            t = t.addingTimeInterval(0.125)
+            e.handle(.tick, now: t)
+            count += 1
+        }
+        #expect(e.activity == .resting)
+        #expect(e.output.offset == -50)
+    }
+
+    @Test func areaShrinkBehindSendsHome() {
+        var e = walking(-120 ... -100)
+        for i in 1...14 {
+            e.handle(.tick, now: at(10, 10, 0.5 + Double(i) * 0.125))
+        }
+        #expect(abs(e.output.offset - -31.5) < 1e-9)
+        e.handle(.walkArea(-28...0), now: at(10, 10, 2.25))
+        #expect(e.activity == .walkingHome)
+    }
+
+    @Test func restingAreaShrinkSendsHome() {
+        var e = walking(-120 ... -100)
+        var t = at(10, 10, 0.5)
+        var count = 0
+        while e.activity != .resting, count < 1000 {
+            t = t.addingTimeInterval(0.125)
+            e.handle(.tick, now: t)
+            count += 1
+        }
+        #expect(e.activity == .resting)
+        e.handle(.walkArea(-90...0), now: t.addingTimeInterval(0.125))
+        #expect(e.activity == .walkingHome)
+    }
+
     @Test func areaGoneSnapsHome() {
         var e = walking()
         e.handle(.tick, now: at(10, 10, 0.625))

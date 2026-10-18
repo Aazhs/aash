@@ -118,6 +118,9 @@ final class FreeWalkStage: WalkStage {
         // Report `visible`, not the target band: the band only picks the target, and an app switch
         // that moves it must not send a buddy that is already out back home.
         plan = measure()
+        if let plan {
+            log.info("rescan: visible \(plan.visible.lowerBound, privacy: .public) … \(plan.visible.upperBound, privacy: .public)")
+        }
         window?.appearance = statusItem.spriteView.effectiveAppearance
         onRoomChanged?(plan?.visible)
     }

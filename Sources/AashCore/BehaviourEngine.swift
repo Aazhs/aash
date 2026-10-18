@@ -123,7 +123,12 @@ public struct BehaviourEngine: Sendable {
             // Out and resting count as away even on the first step, before the offset moves.
             guard isAway || activity == .walkingOut || activity == .resting else { return }
             guard let range else { return snapHome(now) }
-            if activity == .walkingOut || activity == .resting, !range.contains(target) {
+            guard activity == .walkingOut || activity == .resting, !range.contains(target) else { return }
+            if activity == .walkingOut, target < range.lowerBound, offset >= range.lowerBound,
+               range.lowerBound <= -config.minWalkDistance {
+                // Wider menus came to the front ahead of the buddy: stop at their edge, don't turn back.
+                target = range.lowerBound
+            } else {
                 startWalkingHome(now)
             }
         default: break
