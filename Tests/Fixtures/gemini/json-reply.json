@@ -1,0 +1,37 @@
+{
+    "status": "completed",
+    "usage": {
+        "total_tokens": 92,
+        "total_input_tokens": 49,
+        "input_tokens_by_modality": [
+            {
+                "modality": "text",
+                "tokens": 49
+            }
+        ],
+        "total_cached_tokens": 0,
+        "total_output_tokens": 43,
+        "total_tool_use_tokens": 0,
+        "total_thought_tokens": 0
+    },
+    "created": "2026-10-18T17:23:29Z",
+    "updated": "2026-10-18T17:23:29Z",
+    "service_tier": "standard",
+    "steps": [
+        {
+            "signature": "EmAKXgFpFH0TQalh3PUvDZHsnYnq6g7KDgt0wVtrgsmrfPdh/n1NtDeSgO63St3Ss4KgQO29ztcjRSHKZCZ0kYu6dt8mK0c2P83OkdSs9PK5d4LS0NG4BX70/le9eXlasr0=",
+            "type": "thought"
+        },
+        {
+            "content": [
+                {
+                    "text": "{\n  \"isReminder\": true,\n  \"due\": \"2026-10-19T19:00\",\n  \"title\": \"Call mum\"\n}",
+                    "type": "text"
+                }
+            ],
+            "type": "model_output"
+        }
+    ],
+    "object": "interaction",
+    "model": "gemini-3.5-flash-lite"
+}

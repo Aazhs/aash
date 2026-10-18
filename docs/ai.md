@@ -59,7 +59,7 @@ T15 fixes the exact signatures; this is the shape.
 Google's pages show SDK code, not raw bytes. Before any client code is written, T14 makes real
 requests with `curl` and saves the exact responses in `Tests/Fixtures/gemini/`:
 
-- a plain reply (the response JSON, and where its text is: `output_text` or the steps)
+- a plain reply (the response JSON; its text is in the steps, not an `output_text` field)
 - a streamed reply (the raw SSE frames: `event:` and `data:` lines, and how the stream ends)
 - a JSON reply with `response_format`
 - a two-turn conversation with `"store": false` (the exact shape of history steps in `input`)
@@ -70,7 +70,21 @@ those fixtures.
 
 ### Observed format
 
-T14 fills this in.
+Recorded 18 Oct 2026 with `gemini-3.5-flash-lite`. The fixtures and their curl commands are in
+`Tests/Fixtures/gemini/` (see its `README.md`). There is no `output_text` field in any response.
+
+| Fixture | What it shows |
+|---|---|
+| `reply.json` | Reply text at `steps[1].content[0].text`, where `steps[1].type == "model_output"` and `content[0].type == "text"`. `status` is `"completed"`. `steps[0]` is a thinking step with `type == "thought"` (it has a `signature`, no text), so the reply is the step whose `type` is `model_output`, not a fixed index. |
+| `stream.txt` | Each frame has an `event:` line and a `data:` line. `event_type` values in order: `interaction.created`, `interaction.status_update`, `step.start` (thought), `step.delta` (`thought_signature`), `step.stop`, `step.start` (model_output), `step.delta` (text), `step.delta` (text), `step.stop`, `interaction.completed`, `done`. Text chunks are `data.delta.text` where `data.delta.type == "text"`. The stream ends with an `event: done` frame whose data is `[DONE]`, after `interaction.completed`. |
+| `json-reply.json` | The JSON string is at `steps[1].content[0].text` (the `model_output` step). It parses to `{"isReminder": true, "due": "2026-10-19T19:00", "title": "Call mum"}`, which matches the T22 schema (`isReminder` is a boolean, the other fields are strings). |
+| `two-turns.json` | The array-of-steps shape works: `input` is `[{"type":"user_input","content":[{"type":"text","text":…}]}, {"type":"model_output","content":[{"type":"text","text":…}]}, {"type":"user_input","content":[…]}]`, with `"store":false`. HTTP 200; the reply was "Your name is Sam!". The `role`/`content` fallback was not needed. |
+| `bad-key.json` | HTTP **400**. The body is a JSON array with one object: message at `[0].error.message` ("API key not valid. Please pass a valid API key."), status at `[0].error.status` (`INVALID_ARGUMENT`), reason at `[0].error.details[0].reason` (`API_KEY_INVALID`). Map this to `badKey`. |
+
+Fixture file names: `reply.json`, `stream.txt`, `json-reply.json`, `two-turns.json`, `bad-key.json`.
+
+Notes for the client: a non-streamed reply's text is found by picking the `model_output` step, not
+by index. The reply step types seen so far are `thought` and `model_output`.
 
 ### Requests the app makes
 
