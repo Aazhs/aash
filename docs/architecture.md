@@ -72,8 +72,11 @@ The cards give the exact signatures; this is the map.
 | `KeychainStore` | AashAI | `KeychainStore.swift` | T16 | API keys |
 | `ChatPopoverController`, `ChatViewController` | Aash | `ChatPopoverController.swift`, `ChatViewController.swift` | T17, T33 | The popover UI |
 | `SettingsWindowController` | Aash | `SettingsWindowController.swift` | T18 | The settings window |
-| `ReminderPhraseParser` | AashCore | `ReminderPhraseParser.swift` | T20 | "remind me to X at 6" → title + date |
+| `DateMatch`, `ReminderDateDetector` | AashCore | `DateMatch.swift`, `ReminderDateDetector.swift` | T20 | The date phrase in a message, independent of today's date |
+| `ParsedReminder`, `ReminderPhraseParser` | AashCore | `ReminderPhraseParser.swift` | T35 | "remind me to X at 6" → title + date |
+| `ReminderFallback`, `ReminderSuggestion` | AashAI | `ReminderFallback.swift` | T36 | The Gemini fallback request and its reply |
 | `RemindersService` | Aash | `RemindersService.swift` | T21 | EventKit access |
+| `ReminderIntent` | Aash | `ReminderIntent.swift` | T22 | Chat message → parser or Gemini → Reminders, and Undo |
 | `ReminderScheduler` | Aash | `ReminderScheduler.swift` | T23 | Finds the next due reminder and sends `reminderAt`; no timer of its own |
 | `ClaudeCodeProvider` | AashAI | `ClaudeCodeProvider.swift` | T24 | `claude -p` as a chat provider |
 
@@ -87,7 +90,8 @@ status item tooltip shows it.
 - Library types are structs or enums, `Sendable`, with no shared mutable state.
 - Network calls are `async` and run off the main actor inside `AashAI`. Results come back to the
   main actor through `for try await` in an `@MainActor` task.
-- EventKit calls happen in `RemindersService` with `async` APIs, never blocking the main thread.
+- EventKit calls happen in `RemindersService`. Asking for access and fetching are `async`; saving or
+  removing one reminder is a short synchronous call on the main actor (`decisions.md`, 19 Oct).
 - Notification observers use `queue: .main` plus `MainActor.assumeIsolated` (`patterns.md#observers`).
 
 ## Settings keys

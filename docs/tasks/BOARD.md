@@ -2,7 +2,7 @@
 
 `/next` takes the first `todo` row whose `Needs` are all `done`. Status is one of `todo`, `doing`,
 `done`, `blocked` (with a reason). `Model` picks the implementer, `Reviewer` the reviewer. Cards
-with the same `Parallel` group run together. Phases 4–5 are outlines until `/plan-phase N` runs.
+with the same `Parallel` group run together. Phase 5 is an outline until `/plan-phase 5` runs.
 
 | ID | Card | Phase | Model | Reviewer | Needs | Parallel | Status |
 |---|---|---|---|---|---|---|---|
@@ -33,10 +33,12 @@ with the same `Parallel` group run together. Phases 4–5 are outlines until `/p
 | T33 | [Clipboard buttons, Chat menu item, reopen](T33-chat-clipboard-and-menu.md) | 3 | sonnet | sonnet | T17 | — | done |
 | T34 | [Give chat memory back after closing](T34-chat-memory-release.md) | 3 | sonnet | sonnet | T33 | — | done |
 | T19 | [Check: chat memory](T19-chat-budget.md) | 3 | haiku | sonnet | T33, T34 | — | done |
-| T20 | [Reminder phrase parser](T20-reminder-parser.md) | 4 | sonnet | sonnet | T19 | — | todo |
-| T21 | [Reminders store](T21-reminders-store.md) | 4 | sonnet | sonnet | T19 | — | todo |
-| T22 | [Reminders from chat](T22-chat-reminders.md) | 4 | sonnet | sonnet | T20, T21 | — | todo |
-| T23 | [Wave before due](T23-due-wave.md) | 4 | sonnet | sonnet | T21 | — | todo |
+| T20 | [Reminder date detector](T20-reminder-date-detector.md) | 4 | sonnet | sonnet | T19 | P4 | todo |
+| T36 | [Reminder fallback and wording](T36-reminder-fallback.md) | 4 | haiku | sonnet | T19 | P4 | todo |
+| T35 | [Reminder phrase parser](T35-reminder-parser.md) | 4 | sonnet | sonnet | T20 | — | todo |
+| T21 | [Reminders store](T21-reminders-store.md) | 4 | sonnet | sonnet | T35, T36 | — | todo |
+| T22 | [Reminders from chat](T22-chat-reminders.md) | 4 | sonnet | sonnet | T21 | — | todo |
+| T23 | [Wave before due](T23-due-wave.md) | 4 | sonnet | sonnet | T22 | — | todo |
 | T24 | [Ask Claude](T24-ask-claude.md) | 5 | sonnet | sonnet | T23 | — | todo |
 | T25 | [App icon](T25-app-icon.md) | 5 | haiku | sonnet | T23 | — | todo |
 | T26 | [Final pass](T26-final-pass.md) | 5 | sonnet | opus | T24, T25 | — | todo |
