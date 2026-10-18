@@ -15,10 +15,12 @@ final class AppMenu: NSObject, NSMenuDelegate {
     private let isWalking: () -> Bool
     private let onWalkNow: () -> Void
     private let onWalkingChanged: (Bool) -> Void
+    private let reduceMotion: () -> Bool
     private let ownItemFrame: () -> CGRect?
 
     init(settings: AppSettings, isWalking: @escaping () -> Bool,
          onWalkNow: @escaping () -> Void, onWalkingChanged: @escaping (Bool) -> Void,
+         reduceMotion: @escaping () -> Bool,
          ownItemFrame: @escaping () -> CGRect?) {
         let menu = NSMenu()
         menu.autoenablesItems = false
@@ -49,6 +51,7 @@ final class AppMenu: NSObject, NSMenuDelegate {
         self.isWalking = isWalking
         self.onWalkNow = onWalkNow
         self.onWalkingChanged = onWalkingChanged
+        self.reduceMotion = reduceMotion
         self.ownItemFrame = ownItemFrame
         super.init()
         walkNowItem.target = self
@@ -62,10 +65,13 @@ final class AppMenu: NSObject, NSMenuDelegate {
 
     func menuNeedsUpdate(_ menu: NSMenu) {
         loginItem.state = LoginItem.isEnabled ? .on : .off
-        walkNowItem.isEnabled = settings.walkingEnabled && !isWalking()
+        let still = reduceMotion()
+        walkNowItem.isEnabled = settings.walkingEnabled && !still && !isWalking()
+        walkingItem.title = still ? "Walking (off for Reduce Motion)" : "Walking"
+        walkingItem.isEnabled = !still
         walkingItem.state = settings.walkingEnabled ? .on : .off
         freeWalkItem.state = settings.freeWalkEnabled ? .on : .off
-        freeWalkItem.isEnabled = settings.walkingEnabled
+        freeWalkItem.isEnabled = settings.walkingEnabled && !still
     }
 
     @objc private func walkNow(_ sender: NSMenuItem) {

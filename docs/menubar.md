@@ -161,3 +161,13 @@ counts: appMenus 7, extras 7, agentItems 21
 - `agentItems` only repeats `extras` (plus one full-width bar), so it adds nothing. `extras` is enough.
 - `appMenus` gave sensible frames: the frontmost app's menus end at x = 365. The free space for
   walking is between that and the leftmost status item.
+
+## Reduce Motion
+
+While System Settings → Accessibility → Display → Reduce Motion is on, the buddy doesn't walk. It
+still blinks, sleeps, waves and cheers in place. `SystemEvents` reads
+`NSWorkspace.shared.accessibilityDisplayShouldReduceMotion` and listens for
+`NSWorkspace.accessibilityDisplayOptionsDidChangeNotification`, so changes apply without a relaunch.
+`AppDelegate` sends the engine `walkingEnabled(setting && !reduceMotion)`; the stored setting is never
+changed. The menu greys out "Walk now", "Walking" and "Walk on the Whole Bar", and "Walking" reads
+"Walking (off for Reduce Motion)". A walk in progress goes home the normal way.

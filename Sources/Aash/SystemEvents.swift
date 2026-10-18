@@ -18,12 +18,18 @@ final class SystemEvents {
     /// True while any reason applies.
     var isPaused: Bool { !reasons.isEmpty }
 
+    /// Called with the new value whenever Reduce Motion changes.
+    var onReduceMotionChange: ((Bool) -> Void)?
+    /// True while the user has Reduce Motion on.
+    private(set) var reduceMotion: Bool
+
     private let statusWindow: @MainActor () -> NSWindow?
     private var tokens: [(NotificationCenter, NSObjectProtocol)] = []
 
     /// `statusWindow` returns the status item's window when asked; it may be nil early on.
     init(statusWindow: @escaping @MainActor () -> NSWindow?) {
         self.statusWindow = statusWindow
+        self.reduceMotion = NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
     }
 
     /// Starts observing, and reads Low Power Mode's current state.
@@ -40,6 +46,10 @@ final class SystemEvents {
             $0.set(.lowPower, ProcessInfo.processInfo.isLowPowerModeEnabled)
         }
 
+        observe(workspace, NSWorkspace.accessibilityDisplayOptionsDidChangeNotification) {
+            $0.setReduceMotion(NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
+        }
+
         if let window = statusWindow() {
             observe(NotificationCenter.default, NSWindow.didChangeOcclusionStateNotification, object: window) {
                 $0.set(.hidden, !window.occlusionState.contains(.visible))
@@ -49,6 +59,7 @@ final class SystemEvents {
         }
 
         set(.lowPower, ProcessInfo.processInfo.isLowPowerModeEnabled)
+        setReduceMotion(NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
     }
 
     /// Removes every observer.
@@ -82,5 +93,12 @@ final class SystemEvents {
         if isPaused != before {
             onPausedChange?(isPaused)
         }
+    }
+
+    private func setReduceMotion(_ on: Bool) {
+        guard on != reduceMotion else { return }
+        reduceMotion = on
+        log.debug("reduce motion: \(on ? "on" : "off", privacy: .public)")
+        onReduceMotionChange?(on)
     }
 }
