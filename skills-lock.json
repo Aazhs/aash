@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "macos-menubar-app": {
+      "source": "VincentShipsIt/meterbar.dev",
+      "sourceType": "github",
+      "skillPath": "skills/macos-menubar-app/SKILL.md",
+      "computedHash": "557b61bba3c4309322c7029ee6521dc6c78d19fe03d695cc3a6258910eabad14"
+    }
+  }
+}

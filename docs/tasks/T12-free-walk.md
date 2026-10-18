@@ -57,8 +57,8 @@ final class FreeWalkStage: WalkStage {
 
 1. `prepare()`: if `!settings.freeWalkEnabled` or `!MenuBarScanner.isTrusted`, use the fallback
    for this walk. Otherwise scan, build a `MenuBarLayout` (our item from `statusItem.window`, the
-   home sprite x from `statusItem.spriteX(offset: 0)` converted to screen coordinates, notch areas
-   as `blocked`), and call `FreeSpace.plan`. A nil plan, or a scan that isn't believable (no app
+   home sprite x from `statusItem.spriteX(offset: 0)` converted to screen coordinates, no `blocked`
+   ranges: this Mac has no notch), and call `FreeSpace.plan`. A nil plan, or a scan that isn't believable (no app
    menus, zero-size frames, our own item missing), uses the fallback; log the reason.
 2. `show(output)`: offset 0 → the buddy at home in the status item, window hidden. Offset inside
    `plan.visible` → the window at home x + offset, and the status item shows nothing (or an

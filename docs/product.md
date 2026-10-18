@@ -13,7 +13,7 @@ Source: the research doc "Menu bar buddy: research" (17 Oct 2026), with the chan
 |---|---|
 | **Lives in the menu bar** | A status item shows the buddy. No Dock icon. Opens at login if you turn that on. |
 | **Idles** | A still frame that blinks every 3–6 seconds. |
-| **Walks** | Every 5–15 minutes it walks a short way left of its home, rests and walks back. By default it walks inside its own icon, which widens for the walk and shrinks after. With Accessibility allowed, it can walk the free part of the menu bar instead. |
+| **Walks** | Every 5–15 minutes it walks a short way left of its home, rests and walks back. By default it walks inside its own icon, which widens for the walk and shrinks after. With Accessibility allowed, it can walk the free part of the menu bar instead. With Reduce Motion on, it stays home. |
 | **Sleeps** | From 23:00 to 07:00 it sits with its eyes closed and doesn't move. |
 | **Pauses** | Screen asleep, Mac locked, Low Power Mode on, or menu bar hidden: everything stops. |
 | **Chats** | Left-click opens a small popover. Ask a question, or use one-click actions on the clipboard: summarise, rewrite, explain. Replies stream in. Gemini answers; it needs your free API key. |

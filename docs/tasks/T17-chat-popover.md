@@ -27,6 +27,10 @@ cancels any request and frees the views. The buddy reacts: `chatOpened`, `chatCl
 - Enter sends; the history is this popover session only; stream chunks append to the text view.
 - No key → the `noKey` line with a button that opens Settings (T18; until then, a disabled button).
 - Uses `GeminiProvider(apiKey: KeychainStore().read("gemini"))`.
+- System colours and fonts only (`.labelColor`, `.secondaryLabelColor`, `.textBackgroundColor`,
+  `.controlAccentColor`); no hard-coded colours, so light, dark and the user's accent colour work.
+- `AppDelegate.applicationShouldHandleReopen` (Aash opened again from Finder or Spotlight while
+  it's running) opens the popover and returns `false`. An accessory app otherwise shows nothing.
 
 ## Done when (to be detailed by /plan-phase 3)
 

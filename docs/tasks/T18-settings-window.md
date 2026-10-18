@@ -26,6 +26,9 @@ the Keychain), model, walking on or off, walk on the whole bar, open at login, w
   The key is never shown back in full: once saved, show "•••• last 4 characters".
 - A link-style button: "Get a free key at aistudio.google.com".
 - Built when opened, released when closed (`isReleasedWhenClosed` plus dropping the reference).
+- Aash is an accessory app, so call `NSApp.activate()` before `makeKeyAndOrderFront`, or the
+  window opens behind the frontmost app. ⌘, works only while the window or popover is key.
+- System colours only, as in T17. The walking toggles follow T27 (disabled while Reduce Motion is on).
 
 ## Done when (to be detailed by /plan-phase 3)
 
